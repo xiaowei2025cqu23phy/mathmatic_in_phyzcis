@@ -1,0 +1,125 @@
+% ============================================================
+%  main.tex — 《本科物理的数学基础》
+%  编译方式: xelatex -> xelatex (两次编译)
+% ============================================================
+\documentclass[12pt,a4paper,openany]{ctexbook}
+
+% --------------------------- 页面设置 ---------------------------
+\usepackage[top=2.5cm,bottom=2.5cm,left=3cm,right=2.5cm,headheight=14.5pt]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+
+% --------------------------- 字体与编码 ---------------------------
+\usepackage{fontspec}
+\usepackage[UTF8]{ctex}
+% 若系统无 Windows 字体，可取消下面注释改用默认字体
+% \setCJKmainfont{SimSun}
+% \setCJKsansfont{SimHei}
+% \setCJKmonofont{FangSong}
+
+% --------------------------- 数学宏包 ---------------------------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{physics}          % 微分算符、括号、矢量
+\usepackage{bm}               % 粗体数学符号
+\usepackage{mathrsfs}         % 花体 \mathscr
+\usepackage{upgreek}          % 直立体希腊字母
+\DeclareMathOperator{\Arg}{Arg}   % 辐角主值
+\DeclareMathOperator{\sinc}{sinc} % sinc 函数
+\DeclareMathOperator{\erfc}{erfc} % 余误差函数
+
+% --------------------------- 彩色与框 ---------------------------
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\definecolor{insightbg}{RGB}{230,240,255}
+\definecolor{insightframe}{RGB}{70,120,200}
+
+% insight 环境 —— 物理直觉 / 物理洞察
+% 用法: \begin{insight} 或 \begin{insight}[子标题]
+\newtcolorbox[auto counter]{insight}[1][]{
+    colback=insightbg,
+    colframe=insightframe,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={物理洞察~\thetcbcounter\ifstrempty{#1}{}{\ ---\ #1}},
+    sharp corners,
+    breakable,
+    attach boxed title to top left={xshift=6mm,yshift=-2mm},
+    boxed title style={colback=insightframe,sharp corners},
+}
+
+% --------------------------- 图形与浮动体 ---------------------------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{{figures/}}
+
+% --------------------------- 超链接与书签 ---------------------------
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
+
+% --------------------------- 定理环境 ---------------------------
+\theoremstyle{definition}
+\newtheorem{definition}{定义}[chapter]
+\newtheorem{theorem}{定理}[chapter]
+\newtheorem{lemma}{引理}[chapter]
+\newtheorem{corollary}{推论}[chapter]
+\theoremstyle{remark}
+\newtheorem{remark}{注记}[chapter]
+\newtheorem{example}{示例}[chapter]
+
+% --------------------------- 代码/算法 ---------------------------
+\usepackage{listings}
+\lstset{
+    basicstyle=\small\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    frame=single,
+    breaklines=true,
+    backgroundcolor=\color{gray!5},
+}
+
+% --------------------------- 表格与其它 ---------------------------
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{enumitem}
+
+% ============================================================
+%  文档开始
+% ============================================================
+\begin{document}
+
+%------------------ 封面 ------------------
+\begin{titlepage}
+    \centering
+    \vspace*{4cm}
+    \Huge\bfseries 本科物理的数学基础 \\[1cm]
+    \Large Mathematical Foundations for Undergraduate Physics \\[2cm]
+    \large 物理为血肉，数学为骨架 \\[0.5cm]
+    \large — 在物理情景中理解数学，从数学推导中洞察物理 \\[3cm]
+    \large \today \\[1cm]
+    \large 初稿
+    \vfill
+\end{titlepage}
+
+%------------------ 目录 ------------------
+\tableofcontents
+\clearpage
+
+%------------------ 正文包含 ------------------
+\include{chapters/chapter1_vector_and_tensor}
+\include{chapters/chapter2_complex_analysis}
+\include{chapters/chapter3_integral_transforms}
+\include{chapters/chapter4_pde_and_special_functions}
+\include{chapters/chapter5_numerical_methods}
+
+%------------------ 附录/索引（预留） ------------------
+\appendix
+
+\end{document}

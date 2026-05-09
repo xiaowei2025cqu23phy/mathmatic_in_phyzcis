@@ -1,0 +1,128 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {第五章\hspace  {.3em}}数值方法：有限差分与 SciPy 计算}{88}{chapter.5}\protected@file@percent }
+\@writefile{lof}{\addvspace {10.0pt}}
+\@writefile{lot}{\addvspace {10.0pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}本章概览与学习路线}{88}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}有限差分基础}{89}{section.5.2}\protected@file@percent }
+\newlabel{sec:fd_basics}{{5.2}{89}{有限差分基础}{section.5.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}导数的差分近似}{89}{subsection.5.2.1}\protected@file@percent }
+\newlabel{eq:forward_diff}{{5.2}{89}{导数的差分近似}{equation.5.2}{}}
+\newlabel{eq:backward_diff}{{5.3}{89}{导数的差分近似}{equation.5.3}{}}
+\newlabel{eq:central_diff}{{5.4}{89}{导数的差分近似}{equation.5.4}{}}
+\newlabel{eq:second_diff}{{5.5}{89}{导数的差分近似}{equation.5.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}截断误差的详细推导}{89}{subsection.5.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces 有限差分模板。左：一维三点模板，用于离散二阶导数。右：二维五点模板，用于离散拉普拉斯算子。红点为中心点 $u_{i,j}$，蓝点为邻点。}}{90}{figure.caption.60}\protected@file@percent }
+\newlabel{fig:fd_stencil}{{5.1}{90}{有限差分模板。左：一维三点模板，用于离散二阶导数。右：二维五点模板，用于离散拉普拉斯算子。红点为中心点 $u_{i,j}$，蓝点为邻点。}{figure.caption.60}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}差分模板与五点格式}{90}{subsection.5.2.3}\protected@file@percent }
+\newlabel{eq:five_point}{{5.10}{90}{差分模板与五点格式}{equation.5.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}收敛性初步}{90}{subsection.5.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}一维边值问题：泊松方程}{90}{section.5.3}\protected@file@percent }
+\newlabel{sec:poisson1d}{{5.3}{90}{一维边值问题：泊松方程}{section.5.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}问题离散化}{90}{subsection.5.3.1}\protected@file@percent }
+\newlabel{eq:poisson1d}{{5.11}{90}{问题离散化}{equation.5.11}{}}
+\newlabel{eq:poisson_discrete}{{5.12}{91}{问题离散化}{equation.5.12}{}}
+\newlabel{eq:poisson_matrix}{{5.13}{91}{问题离散化}{equation.5.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Python 实现——完整可运行代码}{91}{subsection.5.3.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.1}{\ignorespaces 一维泊松方程的有限差分求解}}{91}{lstlisting.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}稀疏矩阵为什么重要？}{92}{subsection.5.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces 左：$-u''=\sin (\pi x)$ 的数值解与解析解对比（$N=50$），两者几乎完全重合。右：逐点误差（对数坐标），误差呈 $O(h^2)$ 量级。}}{92}{figure.caption.61}\protected@file@percent }
+\newlabel{fig:numerical_solution}{{5.2}{92}{左：$-u''=\sin (\pi x)$ 的数值解与解析解对比（$N=50$），两者几乎完全重合。右：逐点误差（对数坐标），误差呈 $O(h^2)$ 量级。}{figure.caption.61}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}二维拉普拉斯方程}{93}{section.5.4}\protected@file@percent }
+\newlabel{sec:laplace2d}{{5.4}{93}{二维拉普拉斯方程}{section.5.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}五点差分与矩阵构造}{93}{subsection.5.4.1}\protected@file@percent }
+\newlabel{eq:laplace2d_discrete}{{5.14}{93}{五点差分与矩阵构造}{equation.5.14}{}}
+\newlabel{eq:block_tridiag}{{5.15}{93}{五点差分与矩阵构造}{equation.5.15}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.2}{\ignorespaces 二维拉普拉斯方程的有限差分}}{93}{lstlisting.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces 稀疏矩阵非零模式（Spy 图）。左：一维泊松矩阵是标准三对角结构。右：二维五点拉普拉斯矩阵是块三对角结构，非零元素仅占 $O(N)$。}}{94}{figure.caption.62}\protected@file@percent }
+\newlabel{fig:sparse_pattern}{{5.3}{94}{稀疏矩阵非零模式（Spy 图）。左：一维泊松矩阵是标准三对角结构。右：二维五点拉普拉斯矩阵是块三对角结构，非零元素仅占 $O(N)$。}{figure.caption.62}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}热传导方程：时间依赖问题}{94}{section.5.5}\protected@file@percent }
+\newlabel{sec:heat_fd}{{5.5}{94}{热传导方程：时间依赖问题}{section.5.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.1}显式欧拉法}{94}{subsection.5.5.1}\protected@file@percent }
+\newlabel{eq:explicit_euler}{{5.16}{94}{显式欧拉法}{equation.5.16}{}}
+\newlabel{eq:cfl_condition}{{5.17}{94}{显式欧拉法}{equation.5.17}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.2}隐式欧拉法与 Crank-Nicolson 格式}{95}{subsection.5.5.2}\protected@file@percent }
+\newlabel{eq:implicit_euler}{{5.18}{95}{隐式欧拉法与 Crank-Nicolson 格式}{equation.5.18}{}}
+\newlabel{eq:crank_nicolson}{{5.19}{95}{隐式欧拉法与 Crank-Nicolson 格式}{equation.5.19}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.3}{\ignorespaces Crank-Nicolson 法求解热传导方程}}{95}{lstlisting.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.3}三种时间步进格式的对比}{96}{subsection.5.5.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces 热传导方程三种时间步进格式对比}}{96}{table.caption.63}\protected@file@percent }
+\newlabel{tab:time_stepping}{{5.1}{96}{热传导方程三种时间步进格式对比}{table.caption.63}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.6}波动方程：时域有限差分}{96}{section.5.6}\protected@file@percent }
+\newlabel{sec:wave_fd}{{5.6}{96}{波动方程：时域有限差分}{section.5.6}{}}
+\newlabel{eq:wave_fd}{{5.20}{96}{波动方程：时域有限差分}{equation.5.20}{}}
+\newlabel{eq:wave_explicit}{{5.21}{96}{波动方程：时域有限差分}{equation.5.21}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.4}{\ignorespaces 波动方程的时域有限差分}}{97}{lstlisting.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.7}矩阵本征值问题与 SciPy}{97}{section.5.7}\protected@file@percent }
+\newlabel{sec:eigenvalue}{{5.7}{97}{矩阵本征值问题与 SciPy}{section.5.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7.1}从量子力学到数值本征值}{97}{subsection.5.7.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.5}{\ignorespaces 一维无限深势阱的数值本征值}}{98}{lstlisting.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7.2}谐振子的数值本征值}{99}{subsection.5.7.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.6}{\ignorespaces 一维谐振子的数值本征值}}{99}{lstlisting.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7.3}稀疏矩阵存储格式}{100}{subsection.5.7.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces SciPy 稀疏矩阵格式对比}}{100}{table.caption.64}\protected@file@percent }
+\newlabel{tab:sparse_formats}{{5.2}{100}{SciPy 稀疏矩阵格式对比}{table.caption.64}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.8}收敛性分析与误差估计}{100}{section.5.8}\protected@file@percent }
+\newlabel{sec:convergence}{{5.8}{100}{收敛性分析与误差估计}{section.5.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8.1}网格收敛性研究}{100}{subsection.5.8.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.7}{\ignorespaces 收敛性验证}}{101}{lstlisting.5.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces 有限差分的收敛性研究。中心差分 $O(h^2)$ 比单侧差分 $O(h)$ 收敛更快。对数坐标下 $O(h^2)$ 的斜率为 2，$O(h)$ 斜率为 1。}}{101}{figure.caption.65}\protected@file@percent }
+\newlabel{fig:convergence}{{5.4}{101}{有限差分的收敛性研究。中心差分 $O(h^2)$ 比单侧差分 $O(h)$ 收敛更快。对数坐标下 $O(h^2)$ 的斜率为 2，$O(h)$ 斜率为 1。}{figure.caption.65}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.9}傅里叶变换的数值实现：FFT}{102}{section.5.9}\protected@file@percent }
+\newlabel{sec:fft}{{5.9}{102}{傅里叶变换的数值实现：FFT}{section.5.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9.1}离散傅里叶变换 (DFT)}{102}{subsection.5.9.1}\protected@file@percent }
+\newlabel{eq:dft}{{5.25}{102}{离散傅里叶变换 (DFT)}{equation.5.25}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.8}{\ignorespaces FFT 频谱分析}}{102}{lstlisting.5.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9.2}FFT 算法原理简述}{103}{subsection.5.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9.3}用 FFT 求解 PDE}{103}{subsection.5.9.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.9}{\ignorespaces 谱方法求解热传导方程}}{103}{lstlisting.5.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.10}有限元方法初步}{104}{section.5.10}\protected@file@percent }
+\newlabel{sec:fem_intro}{{5.10}{104}{有限元方法初步}{section.5.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.10.1}一维泊松方程的 FEM 离散}{104}{subsection.5.10.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.11}综合案例：有源热传导问题}{105}{section.5.11}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.10}{\ignorespaces 稳态热传导边值问题}}{105}{lstlisting.5.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.12}本章小结}{106}{section.5.12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces 数值方法核心公式速查}}{107}{table.caption.68}\protected@file@percent }
+\newlabel{tab:numerical_formulas}{{5.3}{107}{数值方法核心公式速查}{table.caption.68}{}}
+\@setckpt{chapters/chapter5_numerical_methods}{
+\setcounter{page}{110}
+\setcounter{equation}{29}
+\setcounter{enumi}{0}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{5}
+\setcounter{section}{12}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{4}
+\setcounter{table}{3}
+\setcounter{parentequation}{0}
+\setcounter{tcbbreakpart}{1}
+\setcounter{tcblayer}{0}
+\setcounter{tcolorbox@number}{66}
+\setcounter{tcb@cnt@insight}{31}
+\setcounter{float@type}{16}
+\setcounter{caption@flags}{2}
+\setcounter{continuedfloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+\setcounter{section@level}{0}
+\setcounter{Item}{56}
+\setcounter{Hfootnote}{0}
+\setcounter{Hy@AnnotLevel}{0}
+\setcounter{bookmark@seq@number}{0}
+\setcounter{definition}{0}
+\setcounter{theorem}{0}
+\setcounter{lemma}{0}
+\setcounter{corollary}{0}
+\setcounter{remark}{0}
+\setcounter{example}{0}
+\setcounter{lstnumber}{46}
+\setcounter{lstlisting}{10}
+}
