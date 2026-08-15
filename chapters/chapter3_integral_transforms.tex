@@ -190,7 +190,7 @@ f(t) = \int_{-\infty}^{\infty} \tilde{F}(f) e^{2\pi\mathrm{i}ft}\,\dd f.
 \end{tabular}
 \end{table}
 
-\textbf{时域微分性质} 尤为重要：它将微分方程化为代数方程。这正是傅里叶变换求解微分方程的关键。卷积定理则是线性系统分析的核心——时域中的卷积对应于频域中的乘法，这意味着系统的输出谱 = 输入谱 × 传递函数。
+\textbf{时域微分性质} 尤为重要：它将微分方程化为代数方程。这正是傅里叶变换求解微分方程的关键。卷积定理则是线性系统分析的核心——时域中的卷积对应于频域中的乘法，这意味着系统的输出谱等于输入谱乘以传递函数。
 
 \begin{example}[傅里叶变换性质的推导：时移性质]
 证明 $\mathcal{F}[f(t-t_0)] = e^{-\mathrm{i}\omega t_0}\tilde{f}(\omega)$。
@@ -236,12 +236,12 @@ f(t) = \int_{-\infty}^{\infty} \tilde{F}(f) e^{2\pi\mathrm{i}ft}\,\dd f.
 \mathcal{F}[\delta(t)] &= 1,\\
 \mathcal{F}[1] &= 2\pi\delta(\omega),\\
 \mathcal{F}[e^{-\alpha t}\Theta(t)] &= \frac{1}{\alpha + \mathrm{i}\omega},\quad \Re(\alpha)>0,\\
-\mathcal{F}[e^{-at^2}] &= \sqrt{\frac{\pi}{a}}\,e^{-\omega^2/(4a)},\\
+\mathcal{F}[e^{-at^2}] &= \sqrt{\frac{\pi}{a}}\,e^{-\omega^2/(4a)},\quad a>0,\\
 \mathcal{F}[\cos(\omega_0 t)] &= \pi[\delta(\omega-\omega_0) + \delta(\omega+\omega_0)],\\
 \mathcal{F}[\sin(\omega_0 t)] &= \mathrm{i}\pi[\delta(\omega+\omega_0) - \delta(\omega-\omega_0)].
 \end{align}
 
-\textbf{高斯函数的傅里叶变换仍是高斯函数}——这一性质在量子力学中解释为什么高斯波包是最小不确定波包。也意味着高斯函数是傅里叶变换的本征函数。
+\textbf{高斯函数的傅里叶变换仍是高斯函数}——这一性质在量子力学中解释为什么高斯波包是最小不确定波包。更精确地说，$f(t)=e^{-t^2/2}$ 的变换为 $\sqrt{2\pi}\,e^{-\omega^2/2}$，即它（在相差一个常数因子的意义下）是傅里叶变换的本征函数。
 
 \begin{example}[矩形脉冲的傅里叶变换]
 矩形脉冲 $p_T(t) = \begin{cases} 1, & |t| < T/2, \\ 0, & |t| > T/2. \end{cases}$
@@ -335,6 +335,8 @@ f(t) = \sum_{n=-\infty}^{\infty} f(nT)\,\mathrm{sinc}\!\left(\frac{\pi t}{T} - n
 \psi(x)\,e^{-\mathrm{i}px/\hbar}\,\dd x.
 \end{equation}
 
+这里采用量子力学惯用的对称归一化约定，与本节其余部分 $\tilde f(\omega)=\int f(t)e^{-\mathrm{i}\omega t}\dd t$（逆变换带 $1/2\pi$）的约定只差一个归一化因子，两者在物理上是等价的。
+
 动量算符 $\hat{p} = -\mathrm{i}\hbar\partial_x$ 在动量表象中变为乘法算符 $\hat{p} = p$。傅里叶变换在此完成了\textbf{表象变换}的功能——这正是量子力学的数学框架的核心。
 
 \subsection{不确定性原理}
@@ -352,9 +354,10 @@ f(t) = \sum_{n=-\infty}^{\infty} f(nT)\,\mathrm{sinc}\!\left(\frac{\pi t}{T} - n
 \textbf{证明（概要）：} 利用施瓦兹不等式：
 \begin{align}
 \left(\int |f|^2\,\dd t\right)^2
-&\leq \int |t f(t)|^2\,\dd t \cdot \int |f'(t)|^2\,\dd t \\
-&\leq \Delta t^2 \cdot (\Delta\omega)^2 \cdot \left(\int |f|^2\,\dd t\right)^2.
+&\leq 4\int |t f(t)|^2\,\dd t \cdot \int |f'(t)|^2\,\dd t \\
+&= 4\,\Delta t^2 \cdot (\Delta\omega)^2 \cdot \left(\int |f|^2\,\dd t\right)^2,
 \end{align}
+（第二步用到了帕塞瓦尔定理 $\int|f'|^2\,\dd t = \frac{1}{2\pi}\int\omega^2|\tilde f(\omega)|^2\,\dd\omega$），由此得 $\Delta t\cdot\Delta\omega \geq 1/2$。
 
 等号当且仅当 $f(t) \propto e^{-at^2}$（高斯函数）时成立——这正是最小不确定波包。
 
@@ -397,7 +400,7 @@ f(t) = \sum_{n=-\infty}^{\infty} f(nT)\,\mathrm{sinc}\!\left(\frac{\pi t}{T} - n
 傅里叶变换要求函数在 $\pm\infty$ 绝对可积，许多重要函数（如 $e^{\alpha t}\Theta(t)$ 当 $\alpha>0$、常数函数、多项式）不满足这一条件。引入衰减因子 $e^{-\sigma t}$（$\sigma>0$）迫使积分收敛：
 \begin{equation}
 \mathcal{L}[f(t)] = F(s)
-= \int_0^{\infty} f(t)\,e^{-st}\,\dd t,\qquad s = \sigma + \mathrm{i}\omega.
+= \int_{0^-}^{\infty} f(t)\,e^{-st}\,\dd t,\qquad s = \sigma + \mathrm{i}\omega.
 \label{eq:laplace_transform}
 \end{equation}
 
@@ -514,7 +517,7 @@ A_k = \lim_{s\to p_k} (s-p_k)\frac{N(s)}{D(s)}.
 \begin{equation}
 \frac{N(s)}{(s-p_1)^m\cdots} = \frac{A_{1,m}}{(s-p_1)^m} + \frac{A_{1,m-1}}{(s-p_1)^{m-1}} + \cdots + \frac{A_{1,1}}{s-p_1} + \cdots,
 \end{equation}
-其中 $A_{1,k} = \frac{1}{(k-1)!}\lim_{s\to p_1}\frac{\dd^{k-1}}{\dd s^{k-1}}\left[(s-p_1)^m\frac{N(s)}{D(s)}\right]$。
+其中 $A_{1,k} = \frac{1}{(m-k)!}\lim_{s\to p_1}\frac{\dd^{m-k}}{\dd s^{m-k}}\left[(s-p_1)^m\frac{N(s)}{D(s)}\right]$（$k=1,\dots,m$）。
 
 \textbf{情况 3：共轭复根。}
 保留为二次项形式 $\frac{As+B}{(s+\alpha)^2+\beta^2}$，对应时域中的衰减正弦/余弦。
@@ -569,16 +572,16 @@ B + 2C + D &= 0,\\
 A + 2D + 5C &= 0,\\
 B + 5D &= 10.
 \end{align*}
-解得 $A = -\frac{5}{4}$, $B = \frac{5}{4}$, $C = \frac{5}{4}$, $D = \frac{15}{4}$。
+解得 $A = 1$, $B = 0$, $C = -1$, $D = 2$。
 
 因此：
 \begin{equation}
-Y(s) = \frac{-\frac{5}{4}s + \frac{5}{4}}{(s+1)^2 + 2^2} + \frac{\frac{5}{4}s + \frac{15}{4}}{s^2+1}.
+Y(s) = \frac{s}{(s+1)^2 + 2^2} + \frac{2-s}{s^2+1}.
 \end{equation}
 
 \textbf{步骤 4：逆变换（查表）。}
 \begin{align*}
-y(t) &= -\frac{5}{4}e^{-t}\cos 2t + \frac{5}{2}e^{-t}\sin 2t + \frac{5}{4}\cos t + \frac{15}{4}\sin t.
+y(t) &= e^{-t}\cos 2t - \frac12 e^{-t}\sin 2t - \cos t + 2\sin t.
 \end{align*}
 
 前两项是瞬态解（指数衰减），后两项是稳态解（持续振荡）。
@@ -860,8 +863,8 @@ $f(t) = \frac{1}{2\pi\mathrm{i}}\int_{\sigma_0-\mathrm{i}\infty}^{\sigma_0+\math
 \item[8.] 求传递函数 $H(s) = \frac{1}{(s+1)(s+2)}$ 的单位冲激响应和单位阶跃响应。
 \item[9.] 用拉普拉斯变换求解 $LC$ 串联电路的零状态响应（施加 $V_0\sin(\omega t)$ 电压）。讨论 $\omega = \omega_0 = 1/\sqrt{LC}$ 时的共振情形。
 \item[10.] 求 $f(t) = t^n\Theta(t)$ 的拉普拉斯变换，验证 $\mathcal{L}[t^n] = n!/s^{n+1}$。
-\item[11.] 一个二阶低通滤波器 $H(s) = \frac{\omega_0^2}{s^2 + 2\alpha s + \omega_0^2}$。讨论 $\alpha=0$（无阻尼）、$\alpha<\omega_0$（欠阻尼）、$\alpha=\omega_0$（临界阻尼）时的单位阶跃响应，并画出 $h(t)$ 的波形。
-\item[12.] 求 $f(t) = \cos(100\pi t)$ 的傅里叶变换。如果以 $f_s=120$ Hz 采样，解释为什么会出现混叠（aliasing）现象。
+\item[11.] 一个二阶低通滤波器 $H(s) = \frac{\omega_0^2}{s^2 + 2\alpha s + \omega_0^2}$。讨论 $\alpha=0$（无阻尼）、$\alpha<\omega_0$（欠阻尼）、$\alpha=\omega_0$（临界阻尼）时的单位阶跃响应，并画出阶跃响应 $s(t)$ 的波形。
+\item[12.] 求 $f(t) = \cos(100\pi t)$ 的傅里叶变换（信号频率为 $50$ Hz）。如果以 $f_s=80$ Hz 采样，为什么会出现混叠（aliasing）现象？混叠后观察到的频率是多少？
 \end{enumerate}
 
 \textbf{挑战题（综合拓展）}
@@ -872,5 +875,5 @@ $f(t) = \frac{1}{2\pi\mathrm{i}}\int_{\sigma_0-\mathrm{i}\infty}^{\sigma_0+\math
 \item[15.]（热传导方程的 Laplace 解）用拉普拉斯变换求解有限长杆 $0<x<L$ 的热传导方程，两端温度 $u(0,t)=u(L,t)=0$，初始温度 $u(x,0)=T_0$。对比分离变量法的结果。
 \item[16.]（调制与解调）信号 $m(t)$ 被载波 $\cos(\omega_c t)$ 调制为 $f(t)=m(t)\cos(\omega_c t)$。用傅里叶变换解释如何通过低通滤波器从 $f(t)$ 恢复 $m(t)$。
 \item[17.]（希尔伯特变换）证明解析信号 $f_a(t) = f(t) + \mathrm{i}\hat{f}(t)$ 的傅里叶变换 $\tilde{f}_a(\omega)$ 在 $\omega<0$ 时为零。利用这个性质解释如何从实信号构造其复包络。
-\item[18.]（分数阶傅里叶变换）分数阶傅里叶变换 $F^{\alpha}[f]$ 是传统 FT 的推广。说明当 $\alpha=0$ 时就是恒等变换，$\alpha=\pi/2$ 时是标准傅里叶变换，$\alpha=\pi$ 时是时间反转。讨论其在量子力学中的 chirp 信号分析中的应用。
+\item[18.]（分数阶傅里叶变换）分数阶傅里叶变换 $F^{\alpha}[f]$ 是传统 FT 的推广。说明当 $\alpha=0$ 时就是恒等变换，$\alpha=\pi/2$ 时是标准傅里叶变换，$\alpha=\pi$ 时是时间反转。讨论其在光学传播（Fresnel 衍射）与量子力学波包演化中的应用。
 \end{enumerate}

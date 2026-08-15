@@ -20,7 +20,7 @@
 \begin{itemize}
 \item \textbf{物理专业学生：} 重点关注 \S2.2（相量法）、\S2.6（留数定理算实积分）、\S2.7（保角映射与二维场）、\S2.8（Kramers-Kronig 关系）。\S2.4（多值函数）在初步阅读时只需理解基本概念。
 \item \textbf{数学/应用数学学生：} 重点关注 \S2.3--\S2.6 的严格推导和证明，特别是 Cauchy 理论、留数定理的完整证明、多值函数的 Riemann 曲面解释。
-\item \textbf{电子工程学生：} 重点关注 \S2.2（相量法和复阻抗）、\S2.6（留数定理）、\S2.7（保角映射在传输线中的应用）。
+\item \textbf{电子工程学生：} 重点关注 \S2.2（相量法和复阻抗）、\S2.6（留数定理）、\S2.7（保角映射与二维场）。
 \end{itemize}
 
 \section{复数与相量法}
@@ -154,9 +154,9 @@ $z^4 = 1$ 的四个解为 $1,\mathrm{i},-1,-\mathrm{i}$。将它们记为 $\omeg
 
 这四个根构成了 $4\times4$ 傅里叶矩阵的基础：
 \begin{equation}
-F_{jk} = \frac{1}{\sqrt{4}}\omega_4^{-jk},\quad j,k=0,1,2,3.
+F_{jk} = \frac{1}{\sqrt{4}}\,\omega^{-jk},\quad \omega = e^{2\pi\mathrm{i}/4} = \mathrm{i},\quad j,k=0,1,2,3.
 \end{equation}
-这是 DFT（离散傅里叶变换）在 $N=4$ 时的特例，将在第 3 章中详细讨论。
+这是 DFT（离散傅里叶变换）在 $N=4$ 时的特例，其数值实现（FFT）将在第 3 章中讨论。
 \end{example}
 
 \subsection{复数的物理应用：交流电路中的复阻抗}
@@ -402,11 +402,11 @@ z^\alpha = e^{\alpha\ln z},\quad \alpha\in\mathbb{C}.
 对于 $\ln z$，其黎曼曲面有无限多层——每一层的虚部相差 $2\pi$。这反映了 $\ln z$ 的无限多值性。
 
 \begin{example}[物理中的支点：色散关系]
-在等离子体物理和光学中，介电函数 $\varepsilon(\omega)$ 在复 $\omega$ 平面上具有支点割线结构。解析性质（Kramers-Kronig 关系）保证了因果性——$\varepsilon(\omega)$ 的实部和虚部通过希尔伯特变换相联系。这是多值函数理论在现代物理中的精彩应用。
+在等离子体物理和光学中，介电函数 $\varepsilon(\omega)$ 在复 $\omega$ 平面上具有支点与割线（以及极点）的解析结构。解析性质（Kramers-Kronig 关系）保证了因果性——$\varepsilon(\omega)$ 的实部和虚部通过希尔伯特变换相联系。这是多值函数理论在现代物理中的精彩应用。
 \end{example}
 
-\begin{example}[割线选择的物理后果：$\sqrt{z^2-1}$]
-在空气动力学中，Joukowski 映射 $w = z + 1/z$ 涉及函数 $\sqrt{z^2-1}$。割线的选择决定了物理平面上流动的拓扑结构：选择连接 $z=1$ 和 $z=-1$ 之间的线段作为割线，对应的是绕薄翼型的流动；选择通过无穷远点的割线则对应不同的流动拓扑。割线的位置不是任意的——它由物理边界条件决定。
+\begin{example}[割线选择的物理后果：$\sqrt{w^2-4}$]
+在空气动力学中，Joukowski 映射 $w = z + 1/z$ 的逆映射 $z = \frac12(w\pm\sqrt{w^2-4})$ 涉及函数 $\sqrt{w^2-4}$，其支点为 $w=\pm2$（即 $z=\pm1$ 的像）。选取连接 $w=-2$ 与 $w=2$ 的线段作为割线时，两支分别对应单位圆内、外的区域：圆上的绕流被映为绕线段 $[-2,2]$（平板）的流动；选取过无穷远点的割线则对应不同的叶序。割线位置本身是人为约定，物理上由边界条件决定的是取哪一支。
 \end{example}
 
 \section{复变积分}
@@ -544,9 +544,9 @@ f^{(n)}(z_0) = \frac{n!}{2\pi\mathrm{i}}\oint_C \frac{f(z)}{(z - z_0)^{n+1}}\,\d
 
 柯西积分公式取实部可以导出一个极为重要的结果：对于上半平面 $\Im z > 0$ 内的解析函数，其边界值（实轴上的值）决定了内部的值。
 
-设 $f(z)$ 在上半平面解析且在实轴上足够快地衰减，则
+设 $f(z)$ 在上半平面解析且在实轴上足够快地衰减，则对 $z$ 与 $\bar z$（位于下半平面）分别作围道积分并相减，可得
 \begin{equation}
-f(z) = \frac{1}{\pi\mathrm{i}}\int_{-\infty}^{\infty} \frac{f(t)}{t-z}\,\dd t,\quad \Im z > 0.
+f(z) = \frac{1}{2\pi\mathrm{i}}\int_{-\infty}^{\infty} \frac{f(t)}{t-z}\,\dd t,\quad \Im z > 0.
 \end{equation}
 
 取实部得到\textbf{泊松积分公式}：
@@ -634,7 +634,12 @@ a_n = \frac{1}{2\pi\mathrm{i}}\oint_C \frac{f(z)}{(z-z_0)^{n+1}}\,\dd z.
 $\mathop{\mathrm{Res}}_{z=1} f(z) = \lim_{z\to 1} (z-1)\frac{1}{z-1} = 1$。
 
 \textbf{(2)} $f(z) = \frac{1}{(z-1)^2}$，$z_0=1$：二阶极点。
-由公式：$\mathop{\mathrm{Res}}_{z=1}\frac{1}{(z-1)^2} = \frac{1}{1!}\lim_{z\to1}\frac{\dd}{\dd z}\left[(z-1)^2\frac{1}{(z-1)^2}\right] = \lim_{z\to1}\frac{\dd}{\dd z}(1)=0$。
+由公式：
+\[
+\mathop{\mathrm{Res}}_{z=1}\frac{1}{(z-1)^2}
+= \frac{1}{1!}\lim_{z\to1}\frac{\dd}{\dd z}\left[(z-1)^2\frac{1}{(z-1)^2}\right]
+= \lim_{z\to1}\frac{\dd}{\dd z}(1)=0.
+\]
 直接观察洛朗展开：$f(z) = (z-1)^{-2}$，没有 $(z-1)^{-1}$ 项，所以留数确实为 $0$。
 
 \textbf{(3)} $f(z) = \frac{e^z}{z^2}$，$z_0=0$：二阶极点。
@@ -660,7 +665,7 @@ $\mathop{\mathrm{Res}}_{z=\mathrm{i}}\frac{1}{z^2+1} = \lim_{z\to\mathrm{i}} (z-
 
 留数定理最重要的应用之一是计算各种类型的实积分。我们按类型逐一讨论。
 
-\subsubsection{类型 I：$\int_{-\infty}^{\infty} R(x)\,\dd x$，$R(x)$ 是有理函数}
+\subsubsection{\texorpdfstring{类型 I：$\int_{-\infty}^{\infty} R(x)\,\dd x$，$R(x)$ 是有理函数}{类型 I：∫R(x)dx，R(x) 是有理函数}}
 
 要求 $R(x)$ 的分母次数至少比分子次数高 2 次，且分母无实零点。
 
@@ -696,7 +701,7 @@ $f(z)$ 有奇点 $z=\pm\mathrm{i}$。
 \textbf{结果印证：} $\arctan x|_{-\infty}^{\infty} = \pi/2 - (-\pi/2) = \pi$。一致！
 \end{example}
 
-\subsubsection{类型 II：$\int_{-\infty}^{\infty} R(x) e^{\mathrm{i}ax}\,\dd x$（含三角函数的积分）}
+\subsubsection{\texorpdfstring{类型 II：$\int_{-\infty}^{\infty} R(x) e^{\mathrm{i}ax}\,\dd x$（含三角函数的积分）}{类型 II：∫R(x)e^{iax}dx（含三角函数的积分）}}
 
 对这类积分，Jordan 引理提供了半圆上积分趋于零的条件。
 
@@ -757,7 +762,7 @@ $\varepsilon\to0$ 时，小半圆上的积分 $= -\pi\mathrm{i}\,\mathop{\mathrm
 
 合并实轴上的积分：
 \begin{equation}
-\int_{-\infty}^{\infty} \frac{e^{\mathrm{i}x}}{x}\,\dd x = \pi\mathrm{i}.
+\mathcal{P}\int_{-\infty}^{\infty} \frac{e^{\mathrm{i}x}}{x}\,\dd x = \pi\mathrm{i}.
 \end{equation}
 
 取虚部：
@@ -767,7 +772,7 @@ $\varepsilon\to0$ 时，小半圆上的积分 $= -\pi\mathrm{i}\,\mathop{\mathrm
 \end{equation}
 \end{example}
 
-\subsubsection{类型 III：$\int_0^{2\pi} R(\cos\theta,\sin\theta)\,\dd\theta$}
+\subsubsection{\texorpdfstring{类型 III：$\int_0^{2\pi} R(\cos\theta,\sin\theta)\,\dd\theta$}{类型 III：∫R(cosθ,sinθ)dθ}}
 
 令 $z = e^{\mathrm{i}\theta}$，则 $\cos\theta = (z+z^{-1})/2$，$\sin\theta = (z-z^{-1})/(2\mathrm{i})$，$\dd\theta = \dd z/(\mathrm{i}z)$：
 \begin{equation}
@@ -816,12 +821,12 @@ I = \frac{2}{\mathrm{i}} \cdot 2\pi\mathrm{i} \cdot \frac{1}{2\sqrt{a^2-1}}
 围道内的奇点：$z=\mathrm{i}$ 和 $z=-\mathrm{i}$，留数分别为：
 \begin{align*}
 \mathop{\mathrm{Res}}_{z=\mathrm{i}} \frac{\sqrt{z}}{1+z^2} &= \frac{\sqrt{\mathrm{i}}}{2\mathrm{i}} = \frac{e^{\mathrm{i}\pi/4}}{2\mathrm{i}},\\
-\mathop{\mathrm{Res}}_{z=-\mathrm{i}} \frac{\sqrt{z}}{1+z^2} &= \frac{\sqrt{-\mathrm{i}}}{-2\mathrm{i}} = \frac{e^{-\mathrm{i}\pi/4}}{-2\mathrm{i}}.
+\mathop{\mathrm{Res}}_{z=-\mathrm{i}} \frac{\sqrt{z}}{1+z^2} &= \frac{\sqrt{-\mathrm{i}}}{-2\mathrm{i}} = \frac{e^{3\mathrm{i}\pi/4}}{-2\mathrm{i}} = \frac{e^{-\mathrm{i}\pi/4}}{2\mathrm{i}}.
 \end{align*}
 
 留数之和：
 \[
-\frac{e^{\mathrm{i}\pi/4}}{2\mathrm{i}} - \frac{e^{-\mathrm{i}\pi/4}}{2\mathrm{i}} = \frac{1}{\mathrm{i}}\sin\frac{\pi}{4} = \frac{1}{\sqrt{2}\mathrm{i}}.
+\frac{e^{\mathrm{i}\pi/4}}{2\mathrm{i}} + \frac{e^{-\mathrm{i}\pi/4}}{2\mathrm{i}} = \frac{1}{\mathrm{i}}\cos\frac{\pi}{4} = \frac{1}{\sqrt{2}\,\mathrm{i}}.
 \]
 
 围道积分为 $2\pi\mathrm{i} \cdot \frac{1}{\sqrt{2}\mathrm{i}} = \sqrt{2}\pi$。
@@ -837,7 +842,7 @@ I = \frac{2}{\mathrm{i}} \cdot 2\pi\mathrm{i} \cdot \frac{1}{2\sqrt{a^2-1}}
 \end{example}
 
 \begin{insight}[量子散射理论中的留数]
-在量子力学中，散射振幅 $f(\theta)$ 作为复能量 $E$ 的函数在复平面上有极点结构。\textbf{极点对应束缚态}（实轴下方的极点对应共振态），而\textbf{割线对应连续谱阈值}。留数定理在这里揭示了散射的解析结构与能谱之间的深刻联系——这正是 $S$ 矩阵理论的核心思想。
+在量子力学中，散射振幅 $f(\theta)$ 作为复能量 $E$ 的函数在复平面上有极点结构。\textbf{实轴负半轴上的极点对应束缚态}（实轴下方的极点对应共振态），而\textbf{割线对应连续谱阈值}。留数定理在这里揭示了散射的解析结构与能谱之间的深刻联系——这正是 $S$ 矩阵理论的核心思想。
 \end{insight}
 
 \subsection{围道积分技巧总结}
@@ -887,19 +892,19 @@ V & $\int_{-\infty}^{\infty} \frac{f(x)}{x-x_0}\,\dd x$ & 主值积分 + 小半�
 \item $w = e^{\mathrm{i}\alpha}z$：旋转 $\alpha$
 \item $w = kz$：缩放
 \item $w = 1/z$：反演（将圆变为圆或直线）
-\item $w = z^2$：将角域映射为上半平面
+\item $w = z^2$：将张角为 $\pi/2$ 的角域（如第一象限）映射为上半平面
 \item $w = \sqrt{z}$：将角域映射为半平面（$z^2$ 的逆映射）
 \item $w = e^z$：将水平带形映射为角域
 \item $w = \ln z$：将角域映射为带形（$e^z$ 的逆映射）
 \end{itemize}
 
 \begin{example}[用保角映射求解静电场]
-设有两个半无限平行板电极，电势分别为 $\phi=0$ 和 $\phi=V$，间距 $d$。
-映射 $w = e^{\pi z/d}$ 将带形区域 $0<\Im z<d$ 映射为上半平面 $\Im w>0$，而平行板电容器中均匀场的复势 $F(w) = V/\pi\ln w$。最终得到物理平面上的电势分布：
+设有两个无限大平行板电极，电势分别为 $\phi=0$ 和 $\phi=V$，间距 $d$。
+映射 $w = e^{\pi z/d}$ 将带形区域 $0<\Im z<d$ 映射为上半平面 $\Im w>0$（两板分别映为实轴的正、负半轴），而上半平面中取 $\phi=0$（$w>0$）、$\phi=V$（$w<0$）的复势为 $F(w) = -\mathrm{i}\frac{V}{\pi}\ln w$。注意到 $\ln w = \pi z/d$（主值分支），故 $F(z) = -\mathrm{i}\frac{V}{d}z$，最终得到物理平面上的电势分布：
 \begin{equation}
 \phi(x,y) = \frac{V}{d}\,y,
 \qquad
-\psi(x,y) = \frac{V}{d}\,x.
+\psi(x,y) = -\frac{V}{d}\,x.
 \end{equation}
 这正是平板电容器的均匀场解。保角映射将复杂边界问题化为标准区域上的已知解。
 \end{example}
@@ -923,7 +928,7 @@ w = Re^{\mathrm{i}\theta} + \frac{1}{R}e^{-\mathrm{i}\theta}
 \end{equation}
 这是一个椭圆。如果圆心不在原点而在 $(-\varepsilon,0)$，映射得到的曲线就变成了一个具有圆头尖尾的翼型。
 
-\textbf{物理意义：} 绕圆柱的势流解是已知的（复势 $F(z) = U(z + a^2/z)$），通过 Joukowski 映射可以将其变换为绕翼型的流动。这就是\textbf{薄翼理论}的数学基础。
+\textbf{物理意义：} 绕圆柱的势流解是已知的（复势 $F(z) = U(z + a^2/z)$），通过 Joukowski 映射可以将其变换为绕翼型的流动。这就是\textbf{Joukowski 翼型理论}的数学基础（圆必须经过临界点 $z=1$ 才能得到带尖后缘的翼型）。
 
 \begin{insight}[保角映射的物理哲学]
 保角映射之所以有效，是因为拉普拉斯方程 $\nabla^2\phi=0$ 在解析变换下形式不变。换句话说，\textbf{静电场、稳态热传导、无旋流场、静磁场（无源区）都共享同一数学结构}。当你解出了其中一个问题的保角映射解，就免费得到了所有其他问题的解。这种数学统一性正是物理学家追求的境界。
@@ -952,14 +957,14 @@ w = A\int_{z_0}^{z} (\zeta - x_1)^{\alpha_1-1}(\zeta - x_2)^{\alpha_2-1}\cdots(\
 二维静电场和不可压缩无旋流场可以用复势统一描述。设 $\phi$ 为势函数，$\psi$ 为流函数：
 \begin{equation}
 F(z) = \phi(x,y) + \mathrm{i}\psi(x,y),\quad
-F'(z) = E_x - \mathrm{i}E_y \quad(\text{电场情形}).
+F'(z) = -E_x + \mathrm{i}E_y \quad(\text{电场情形}).
 \end{equation}
 
 \textbf{物理量对应关系：}
 \begin{itemize}
 \item $\phi$ = 电势 / 速度势
 \item $\psi$ = 流函数（$\nabla\psi$ 旋转 $90^\circ$ 给出场方向）
-\item $F'(z)$ = 共轭场强 / 复速度
+\item $F'(z)$ = 复速度（流体情形 $v_x-\mathrm{i}v_y$）；电场情形 $F' = -E_x+\mathrm{i}E_y$（即共轭场强的负值）
 \end{itemize}
 
 \begin{example}[点源的复势]
@@ -976,7 +981,7 @@ F(z) = \frac{\lambda}{2\pi}\ln z
 \begin{equation}
 F(z) = \frac{p}{2\pi z}.
 \end{equation}
-这是二维电偶极子的复势。对应的电场 $E_x - \mathrm{i}E_y = F'(z) = -\frac{p}{2\pi z^2}$。等势线 $\Re(F) = \text{常数}$ 是一族通过原点的圆。
+这是二维电偶极子的复势。对应的电场 $E_x - \mathrm{i}E_y = -F'(z) = \frac{p}{2\pi z^2}$。等势线 $\Re(F) = \text{常数}$ 是一族通过原点的圆。
 \end{example}
 
 \begin{example}[均匀流绕圆柱]
@@ -1018,7 +1023,7 @@ F(z) = U\left(z + \frac{a^2}{z}\right).
 \end{example}
 
 \begin{insight}
-Kramers-Kronig 关系的物理意义振聋发聩：\textbf{如果只知道某个频率下材料的吸收谱（$\chi''$ 的虚部），就可以唯一地计算出色散（$\chi'$ 的实部）}。反之亦然。这意味着"吸收"和"色散"不是独立的物质性质——它们是同一个解析函数在实轴上的实部和虚部。光学中折射率和消光系数的关系、粒子物理中 forward scattering 的色散关系，都源于此。
+Kramers-Kronig 关系的物理意义振聋发聩：\textbf{如果知道全频段的吸收谱（$\chi$ 的虚部 $\chi''$），就可以唯一地计算出色散（$\chi$ 的实部 $\chi'$）}。反之亦然。这意味着"吸收"和"色散"不是独立的物质性质——它们是同一个解析函数在实轴上的实部和虚部。光学中折射率和消光系数的关系、粒子物理中 forward scattering 的色散关系，都源于此。
 \end{insight}
 
 \subsection{线性系统的传递函数与解析性}
@@ -1087,7 +1092,7 @@ $f(z_0) = \frac{1}{2\pi\mathrm{i}}\oint_C \frac{f(z)}{z-z_0}\,\dd z$ & 柯西积
 $f^{(n)}(z_0) = \frac{n!}{2\pi\mathrm{i}}\oint_C \frac{f(z)}{(z-z_0)^{n+1}}\,\dd z$ & 高阶导数公式 \\
 $\oint_C f(z)\,\dd z = 2\pi\mathrm{i}\sum\mathop{\mathrm{Res}} f(z_k)$ & 留数定理 \\
 $\mathop{\mathrm{Res}}_{z=z_0} f = \lim_{z\to z_0}(z-z_0)f(z)$ & 一阶极点留数 \\
-$\mathop{\mathrm{Res}}_{z=z_0} f = \frac{1}{(m-1)!}\lim_{z\to z_0}\frac{d^{m-1}}{dz^{m-1}}[(z-z_0)^m f(z)]$ & $m$ 阶极点留数 \\
+$\mathop{\mathrm{Res}}_{z=z_0} f = \frac{1}{(m-1)!}\lim_{z\to z_0}\frac{\dd^{m-1}}{\dd z^{m-1}}[(z-z_0)^m f(z)]$ & $m$ 阶极点留数 \\
 $w = z + 1/z$ & Joukowski 映射 \\
 $\chi'(\omega) = \frac{1}{\pi}\mathcal{P}\int\frac{\chi''(\omega')}{\omega'-\omega}\,\dd\omega'$ & Kramers-Kronig 关系 \\
 \bottomrule
@@ -1095,7 +1100,7 @@ $\chi'(\omega) = \frac{1}{\pi}\mathcal{P}\int\frac{\chi''(\omega')}{\omega'-\ome
 \end{table}
 
 \begin{insight}
-回顾第 2 章，你会发现一条主线：\textbf{从复数的代数引入 $\to$ 解析函数的微分约束 $\to$ 整体积分性质 $\to$ 留数与奇点结构 $\to$ 物理应用}。这与第 1 章中"局部微分 $\to$ 整体积分"的思维模式一脉相承。在复变函数的语境中，局部就是柯西-黎曼方程，整体就是留数定理。
+回顾本章，你会发现一条主线：\textbf{从复数的代数引入 $\to$ 解析函数的微分约束 $\to$ 整体积分性质 $\to$ 留数与奇点结构 $\to$ 物理应用}。这与第 1 章中"局部微分 $\to$ 整体积分"的思维模式一脉相承。在复变函数的语境中，局部就是柯西-黎曼方程，整体就是留数定理。
 \end{insight}
 
 \section*{习题}
@@ -1130,8 +1135,8 @@ $\chi'(\omega) = \frac{1}{\pi}\mathcal{P}\int\frac{\chi''(\omega')}{\omega'-\ome
 \begin{enumerate}
 \item[13.]（双线性变换）映射 $w = \frac{z-1}{z+1}$ 将右半平面 $\Re(z)>0$ 映射到单位圆 $|w|<1$。证明这一性质。该映射在控制理论中用于将 $s$ 平面的稳定性边界映射到 $z$ 平面的单位圆。
 \item[14.]（Kramers-Kronig 练习）设 $\chi''(\omega) = \frac{\omega}{1+\omega^2}$，利用 Kramers-Kronig 关系求 $\chi'(\omega)$。\textbf{提示：} 用留数定理计算主值积分。验证你的结果满足 $\chi(-\omega) = \chi^*(\omega)$（实信号的对称性）。
-\item[15.]（量子散射）一维薛定谔方程的一个解为 $\psi(x) \sim e^{\mathrm{i}kx} + f(k)\frac{e^{\mathrm{i}k|x|}}{|x|}$。散射振幅 $f(k)$ 在复 $k$ 平面上有极点 $k=\mathrm{i}\kappa$（$\kappa>0$），证明这对应束缚态，其能量为 $E = -\hbar^2\kappa^2/(2m)$。
+\item[15.]（量子散射）一维薛定谔方程的一个解为 $\psi(x) \sim e^{\mathrm{i}kx} + f(k)\,e^{\mathrm{i}k|x|}$。散射振幅 $f(k)$ 在复 $k$ 平面上有极点 $k=\mathrm{i}\kappa$（$\kappa>0$），证明这对应束缚态，其能量为 $E = -\hbar^2\kappa^2/(2m)$。
 \item[16.]（保角映射与传热）一半无限大平板 $x>0$，$y=0$ 边界上温度分布为 $T(x,0)=T_0\Theta(a-|x|)$（即 $|x|<a$ 处 $T=T_0$，其余 $T=0$）。通过适当的保角映射和复势方法，求平板上方的稳态温度分布。
 \item[17.]（割线围道积分）计算 $\displaystyle\int_0^{\infty} \frac{\ln x}{1+x^2}\,\dd x$。\textbf{提示：} 考虑 $f(z) = \frac{(\ln z)^2}{1+z^2}$ 的围道积分，取割线沿正实轴。
-\item[18.]（Joukowski 翼型）设 $z$ 平面上的圆为 $|z - \varepsilon| = 1 + \varepsilon$（$\varepsilon>0$ 小量），圆心在 $(\varepsilon,0)$。通过 Joukowski 映射 $w = z + 1/z$ 得到翼型形状。证明翼型在 $w=2$ 处有尖点（后缘），并画出 $\varepsilon=0.1$ 时的翼型轮廓。
+\item[18.]（Joukowski 翼型）设 $z$ 平面上的圆为 $|z + \varepsilon| = 1 + \varepsilon$（$\varepsilon>0$ 小量），圆心在 $(-\varepsilon,0)$（圆经过临界点 $z=1$）。通过 Joukowski 映射 $w = z + 1/z$ 得到翼型形状。证明翼型在 $w=2$ 处有尖点（后缘），并画出 $\varepsilon=0.1$ 时的翼型轮廓。
 \end{enumerate}

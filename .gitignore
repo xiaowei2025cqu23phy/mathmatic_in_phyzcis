@@ -1,0 +1,20 @@
+# ---------- LaTeX 编译产物 ----------
+*.aux
+*.log
+*.fdb_latexmk
+*.fls
+*.out
+*.toc
+*.xdv
+*.synctex.gz
+*.bbl
+*.blg
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+
+# ---------- 系统文件 ----------
+.DS_Store
+Thumbs.db

@@ -6,7 +6,7 @@
 
 \section{本章概览与学习路线}
 
-前三章建立了物理问题的解析框架：分离变量、特殊函数、积分变换。但现实世界远比教科书复杂——非均匀介质、非线性项、不规则边界，这些都会使解析解遥不可及。
+前四章建立了物理问题的解析框架：分离变量、特殊函数、积分变换。但现实世界远比教科书复杂——非均匀介质、非线性项、不规则边界，这些都会使解析解遥不可及。
 
 数值方法不是解析方法的替代，而是\textbf{互补}：
 \begin{itemize}
@@ -14,7 +14,7 @@
 \item 数值解提供特定条件下的定量预言。
 \end{itemize}
 
-本章以\textbf{有限差分法} 为主线，结合 Python 的 NumPy/SciPy 生态，让你亲手"计算"前三章的偏微分方程。你将看到分离变量法给出的本征函数如何转化为矩阵本征值问题，傅里叶变换如何用 FFT 在 $O(N\log N)$ 时间内完成。
+本章以\textbf{有限差分法} 为主线，结合 Python 的 NumPy/SciPy 生态，让你亲手"计算"前四章的偏微分方程。你将看到分离变量法给出的本征函数如何转化为矩阵本征值问题，傅里叶变换如何用 FFT 在 $O(N\log N)$ 时间内完成。
 
 \begin{center}
 \fbox{\parbox{0.9\textwidth}{\centering
@@ -26,9 +26,9 @@
 \subsection*{不同读者的学习路径}
 
 \begin{itemize}
-\item \textbf{物理专业学生：} 重点关注 \S5.2--\S5.5（有限差分基础与 PDE 离散化），\S5.7（矩阵本征值问题——量子力学的数值视角），\S5.8（FFT 与谱方法）。
-\item \textbf{计算科学学生：} 重点关注 \S5.2（截断误差与收敛性分析），\S5.3--\S5.5（不同时间步进格式的稳定性），\S5.10（误差分析与网格收敛性研究）。
-\item \textbf{工程学生：} 重点关注 \S5.3--\S5.6（综合案例）中的可运行代码，直接应用于实际问题。
+\item \textbf{物理专业学生：} 重点关注 \S5.2--\S5.5（有限差分基础与 PDE 离散化），\S5.7（矩阵本征值问题——量子力学的数值视角），\S5.9（FFT 与谱方法）。
+\item \textbf{计算科学学生：} 重点关注 \S5.2（截断误差与收敛性分析），\S5.5--\S5.6（不同时间步进格式的稳定性），\S5.8（误差分析与网格收敛性研究）。
+\item \textbf{工程学生：} 重点关注 \S5.3--\S5.6 中可运行的数值算例代码，以及 \S5.11 的综合案例，直接应用于实际问题。
 \end{itemize}
 
 \section{有限差分基础}
@@ -193,7 +193,7 @@ def poisson_1d(N=100):
 x, u_num, u_ex = poisson_1d(N=50)
 error = np.max(np.abs(u_num - u_ex))
 print(f"Max error: {error:.2e}")
-# N=50 时输出约 6.6e-4 (O(h^2) 收敛)
+# N=50 时输出约 3.3e-5 (O(h^2) 收敛)
 \end{lstlisting}
 
 \subsection{稀疏矩阵为什么重要？}
@@ -261,13 +261,13 @@ def laplace_2d(M=50):
          + sparse.kron(sparse.diags([e], [-1], shape=(M, M)), -I)
          + sparse.kron(sparse.diags([e], [1], shape=(M, M)), -I))
 
-    # 边界条件: u=0 在上边界 (y=1), 其余边界 u=0
+# 边界条件: 上边界 y=1 处 u=sin(pi*x), 其余边界 u=0
     f = np.zeros(N)
     x = np.linspace(0, 1, M+2)[1:-1]
     u_top = np.sin(np.pi * x)
     for j in range(M):
         idx = (M-1)*M + j  # 最后一行
-        f[idx] += u_top[j] / h**2
+        f[idx] += u_top[j]
 
     u_flat = spsolve(A.tocsr(), f)
     u = u_flat.reshape((M, M))
@@ -285,6 +285,35 @@ print(f"Solution shape: {u.shape}")
 \caption{稀疏矩阵非零模式（Spy 图）。左：一维泊松矩阵是标准三对角结构。右：二维五点拉普拉斯矩阵是块三对角结构，非零元素仅占 $O(N)$。}
 \label{fig:sparse_pattern}
 \end{figure}
+
+\subsection{迭代法初步：Jacobi、Gauss-Seidel 与 SOR}
+
+直接法（Thomas 算法、\texttt{spsolve}）适合中小规模问题；当网格点数达到 $10^5$ 量级时，\textbf{迭代法}——每步只做一次矩阵-矢量乘法，内存占用 $O(N)$——成为更现实的选择。
+
+以二维拉普拉斯方程的五点格式 $4u_{ij} = u_{i+1,j}+u_{i-1,j}+u_{i,j+1}+u_{i,j-1}$ 为例，设第 $k$ 次迭代的近似值为 $u^{(k)}_{ij}$：
+
+\textbf{Jacobi 迭代}（同步更新）：
+\begin{equation}
+u^{(k+1)}_{ij} = \frac14\left(u^{(k)}_{i+1,j}+u^{(k)}_{i-1,j}+u^{(k)}_{i,j+1}+u^{(k)}_{i,j-1}\right).
+\label{eq:jacobi}
+\end{equation}
+
+\textbf{Gauss-Seidel 迭代}（按行扫描，立即使用刚算出的新值）：
+\begin{equation}
+u^{(k+1)}_{ij} = \frac14\left(u^{(k)}_{i+1,j}+u^{(k+1)}_{i-1,j}+u^{(k)}_{i,j+1}+u^{(k+1)}_{i,j-1}\right).
+\label{eq:gauss_seidel}
+\end{equation}
+
+\textbf{SOR（逐次超松弛）}：在 Gauss-Seidel 基础上外推，松弛因子 $\omega\in(0,2)$：
+\begin{equation}
+u^{(k+1)}_{ij} = (1-\omega)u^{(k)}_{ij} + \omega\,\hat{u}^{(k+1)}_{ij},
+\label{eq:sor}
+\end{equation}
+其中 $\hat{u}^{(k+1)}_{ij}$ 是 Gauss-Seidel 的更新值。$\omega<1$ 为欠松弛，$\omega>1$ 为超松弛；对单位正方形上的五点格式，最优因子为 $\omega_{\mathrm{opt}} \approx 2/(1+\sin\pi h)$，收敛速度比 Jacobi 快一个数量级。
+
+\textbf{收敛性：} 对角占优或正定矩阵保证 Jacobi 与 Gauss-Seidel 收敛，收敛速度由迭代矩阵的谱半径 $\rho$ 决定。对 $M\times M$ 网格的五点格式，Jacobi 的谱半径为 $\rho(J)=\cos(\pi h)$（$h=1/(M+1)$），达到给定精度所需的迭代次数按 $O(M^2)$ 增长；Gauss-Seidel 的谱半径约为 $\rho(J)^2$（收敛快一倍）；SOR 取最优因子时谱半径 $\sim 1-O(h)$，收敛再快一个量级。
+
+\textbf{停机准则：} 常用相邻两次迭代的最大改变量 $\|u^{(k+1)}-u^{(k)}\|_\infty < \varepsilon$，或残差范数 $\|Au^{(k)}-f\| < \varepsilon$。
 
 \section{热传导方程：时间依赖问题}
 \label{sec:heat_fd}
@@ -304,10 +333,14 @@ r = \frac{\kappa\Delta t}{h^2} \leq \frac{1}{2}.
 \label{eq:cfl_condition}
 \end{equation}
 
-如果 $r>1/2$，数值解会指数增长——这是因为显式格式的放大因子 $|1 - 4r\sin^2(kh/2)| > 1$ 对高频模成立。
+如果 $r>1/2$，数值解会指数增长。原因在于显式格式的放大因子
+\[
+|g(k)| = \left|1 - 4r\sin^2\frac{kh}{2}\right| > 1
+\]
+对高频模成立。
 
-\begin{insight}[CFL 条件的物理解读]
-CFL 条件 $r \leq 1/2$ 的物理解读：在一个时间步内，信息最多只能传播一个网格间距。如果 $\Delta t$ 太大，数值格式就"看不到"相邻网格点之间的物理耦合，导致不稳定。这呼应了波动方程中双曲型 PDE 的有限传播速度——数值稳定性与物理因果性在这里达成了一致。
+\begin{insight}[CFL 条件的数值解读]
+CFL 条件 $r \leq 1/2$ 的数值解读：它等价于要求放大因子 $|g(k)| \leq 1$ 对所有波数 $k$ 成立（von Neumann 稳定性分析）。注意热传导方程是抛物型的，物理上信息的传播速度是无穷的（解在 $t>0$ 后立即处处非零），因此 $r\leq1/2$ 纯粹来自数值稳定性要求，与 \S5.6 波动方程中"数值依赖域必须包含物理依赖域"的因果性条件（$c\Delta t/h \leq 1$）性质不同，不可混为一谈。
 \end{insight}
 
 \subsection{隐式欧拉法与 Crank-Nicolson 格式}
@@ -364,7 +397,7 @@ def heat_cn(Nx=100, Nt=500, T_final=0.1):
 
 x, u, err = heat_cn(Nx=100, Nt=500, T_final=0.1)
 print(f"Crank-Nicolson error: {err:.2e}")
-# Nx=100, Nt=500 时误差约 1e-5
+# Nx=100, Nt=500 时误差约 3e-5
 \end{lstlisting}
 
 \subsection{三种时间步进格式的对比}
@@ -431,8 +464,8 @@ def wave_1d(Nx=200, c=1.0, T_final=2.0):
         u_prev, u_curr, u_next = u_curr, u_next, u_prev
 
     return x, u_curr
-# 初始高斯波包在 t=2 时应分裂为两个半波包
-# 分别运行至 x = ±c*t = ±2
+# 初始静止高斯波包分裂为两个半波包分别向 +x 与 -x 传播
+# 计算域为 [-1,1]（边界点恒为 0，等价固定端），t 约 1 时波包已触边并反射
 \end{lstlisting}
 
 \section{矩阵本征值问题与 SciPy}
@@ -481,8 +514,8 @@ def quantum_well(N=500):
 x, ev = quantum_well(N=500)
 # 输出示例:
 # n   Numerical   Exact      Error
-# 1   1.23370    1.23370    1.2e-10
-# 2   4.93480    4.93480    3.1e-10
+# 1   1.233696   1.233701   4.1e-06
+# 2   4.934737   4.934802   6.5e-05
 \end{lstlisting}
 
 \begin{insight}
@@ -527,7 +560,7 @@ def quantum_harmonic_oscillator(N=500):
               f"{abs(eigenvalues[i]-E_exact[i]):.2e}")
 
 quantum_harmonic_oscillator(N=1000)
-# 前几个能级的误差通常在 1e-6 量级
+# 基态误差约 3e-6；误差随 n 增大而增大（n=2 约 4e-5）
 \end{lstlisting}
 
 \subsection{稀疏矩阵存储格式}
@@ -591,7 +624,7 @@ def convergence_study():
     for i in range(len(errors)-1):
         p = np.log(errors[i]/errors[i+1]) / np.log(hs[i]/hs[i+1])
         print(f"N={Ns[i]}->{Ns[i+1]}: p = {p:.2f}")
-    # 预期输出: p ≈ 2.00
+    # 预期输出: p 约为 2.00
 
     return hs, errors
 \end{lstlisting}
@@ -643,8 +676,8 @@ plt.title('FFT Spectrum')
 # 预期在 50 Hz 和 120 Hz 处有两个尖峰
 
 # 验证 Parseval 定理
-E_time = np.trapz(f**2, t)
-E_freq = np.trapz(np.abs(F)**2, freq) / len(F)
+E_time = np.trapezoid(f**2, t)
+E_freq = np.trapezoid(np.abs(F)**2, freq) / fs**2
 print(f"Time-domain energy: {E_time:.4f}")
 print(f"Freq-domain energy: {E_freq:.4f}")
 print(f"Relative error: {abs(E_time-E_freq)/E_time:.2e}")
@@ -656,8 +689,8 @@ FFT 的核心是\textbf{分治策略}（Cooley-Tukey 算法，1965）：
 
 将长度为 $N=2^m$ 的 DFT 分解为两个长度为 $N/2$ 的 DFT：
 \begin{equation}
-\tilde{f}_n = \sum_{k=0}^{N/2-1} f_{2k} e^{-2\pi\mathrm{i} n(2k)/N}
-+ e^{-2\pi\mathrm{i} n/N}\sum_{k=0}^{N/2-1} f_{2k+1} e^{-2\pi\mathrm{i} n(2k+1)/N}.
+\tilde{f}_n = \sum_{k=0}^{N/2-1} f_{2k} e^{-2\pi\mathrm{i} nk/(N/2)}
++ e^{-2\pi\mathrm{i} n/N}\sum_{k=0}^{N/2-1} f_{2k+1} e^{-2\pi\mathrm{i} nk/(N/2)}.
 \end{equation}
 
 递归下去，总操作数从 $N^2$ 降为 $N\log_2 N$。例如 $N=1024$，DFT 需要约 $10^6$ 次操作，FFT 只需约 $10^4$ 次——加速比约 100 倍。
@@ -736,7 +769,7 @@ print(f"Spectral method error: {err:.2e}")
 计算 $\int \phi_i'\phi_j'\,\dd x$：对 $i=j$，结果为 $2/h$；对相邻节点 $|i-j|=1$，结果为 $-1/h$；其余为 0。这正是有限差分的三对角矩阵！
 
 \begin{insight}
-对于一维泊松方程，线性有限元与中心差分有限导出的矩阵完全相同！但 FEM 在处理\textbf{非均匀网格}和\textbf{复杂边界}时更加灵活——自然边界条件（Neumann）在弱形式中自动满足，不需要特殊处理。
+对于一维泊松方程，线性有限元与中心差分导出的矩阵完全相同（严格地说，FEM 刚度矩阵与 FD 矩阵相差因子 $h$，右端项亦同，故解完全相同）！但 FEM 在处理\textbf{非均匀网格}和\textbf{复杂边界}时更加灵活——自然边界条件（Neumann）在弱形式中自动满足，不需要特殊处理。
 \end{insight}
 
 \section{综合案例：有源热传导问题}
@@ -770,8 +803,8 @@ def steady_heat_source(N=200):
     A[0, 0] = 1
     A[0, 1] = 0
 
-    # 右边界 Neumann: u'(1)=0 => u_N - u_{N-1}=0
-    # 修改最后一行的离散方程
+    # 右边界 Neumann: 末行离散方程为 (u_N-u_{N-1})/h^2 = f_N，
+    # 因 f(1) 约等于 0，数值上相当于 u'(1) 约等于 0（一阶 Neumann 近似）
     A[N, N-1] = -1 / h**2
     A[N, N] = 1 / h**2
 
@@ -788,7 +821,8 @@ plt.plot(x, u)
 plt.xlabel('x')
 plt.ylabel('u(x)')
 plt.title('Steady temperature with laser heat source')
-# 预期: 热源附近温度最高，向左边界衰减至 0
+# 预期: 温度自 u(0)=0 单调上升（u'(x) 恒大于 0），
+# 最大值出现在绝缘右端 x=1 处
 \end{lstlisting}
 
 \section{本章小结}
@@ -840,7 +874,7 @@ $E(h) \approx C h^p$ & 收敛性 \\
 \end{table}
 
 \begin{insight}[第 5 章的核心思维链条]
-\textbf{连续 PDE $\to$ 网格离散 $\to$ 差分近似 $\to$ 稀疏矩阵 $\to$ 代数方程组求解。} 这个链条将前三章的所有解析工具（微分算符、傅里叶变换、特殊函数）统一为可计算的数值框架。你可以将本章看作前三章的"数值镜像"——每当你学到一个新的解析方法，都应该想一想："这个问题的离散版本是什么？对应的矩阵长什么样？"
+\textbf{连续 PDE $\to$ 网格离散 $\to$ 差分近似 $\to$ 稀疏矩阵 $\to$ 代数方程组求解。} 这个链条将前四章的所有解析工具（微分算符、傅里叶变换、特殊函数）统一为可计算的数值框架。你可以将本章看作前四章的"数值镜像"——每当你学到一个新的解析方法，都应该想一想："这个问题的离散版本是什么？对应的矩阵长什么样？"
 \end{insight}
 
 \section*{习题}
@@ -848,7 +882,7 @@ $E(h) \approx C h^p$ & 收敛性 \\
 \textbf{基础题（巩固概念）}
 
 \begin{enumerate}
-\item 修改 \texttt{poisson\_1d} 函数，将右端项改为 $f(x)=x(1-x)$，并与解析解 $u(x)=x(1-x)(2-x)/12$ 比较误差。验证误差随 $h$ 以 $O(h^2)$ 衰减。
+\item 修改 \texttt{poisson\_1d} 函数，将右端项改为 $f(x)=x(1-x)$，并与解析解 $u(x)=\frac{1}{12}x(1-x)(1+x-x^2)$ 比较误差。验证误差随 $h$ 以 $O(h^2)$ 衰减。
 \item 在 Crank-Nicolson 求解热传导的代码中，观察 $r=0.1, 0.5, 1.0, 5.0$ 时的稳定性。对比显式欧拉法在此 $r$ 值下的表现。
 \item 写出五点差分格式 $u_{i+1,j}+u_{i-1,j}+u_{i,j+1}+u_{i,j-1}-4u_{ij}=0$ 的截断误差推导过程，验证其为 $O(h^2)$。
 \item 编写一段 Python 代码，用 FFT 生成 200 Hz + 300 Hz 混合信号的频谱图。
@@ -863,15 +897,16 @@ $E(h) \approx C h^p$ & 收敛性 \\
 \item[8.] 计算 $N=10,20,40,80$ 时二维拉普拉斯方程的解，绘制最大误差随 $N$ 的变化曲线（对数坐标），验证 $O(h^2)$ 收敛。
 \item[9.] 设计一个带通滤波器（保留 200 Hz 附近成分），用 FFT 对含噪声信号进行滤波处理。将滤波前后的时域信号和频谱画在同一张图上。
 \item[10.] 将一维热传导方程的 FFT 谱方法与 Crank-Nicolson 有限差分法做对比，比较 $N=32,64,128$ 时的计算时间和误差。
-\item[11.] 对二维拉普拉斯方程使用不同的迭代求解方法（Jacobi 迭代、Gauss-Seidel 迭代、SOR 方法），比较收敛速度。\textbf{提示：} 对 $M=20$ 的网格，画出误差随迭代步数的变化曲线。
-\item[12.] 编写一个函数，利用 Thomas 算法（追赶法）求解三对角系统，并与 \texttt{scipy.sparse.linalg.spsolve} 比较计算时间。
+\item[11.] 对二维拉普拉斯方程使用 \S5.4 介绍的迭代求解方法（Jacobi 迭代、Gauss-Seidel 迭代、SOR 方法），比较收敛速度。\\
+\textbf{提示：} 取 $M=20$ 的网格，画出误差随迭代步数的变化曲线。
+\item[12.] 编写一个函数，利用 Thomas 算法（追赶法）求解三对角系统，\\ 并与 \texttt{scipy.sparse.linalg.spsolve} 比较计算时间。
 \end{enumerate}
 
 \textbf{挑战题（综合拓展）}
 
 \begin{enumerate}
 \item[13.]（二维泊松方程求解器）编写求解 $-\nabla^2 u = f$ 的二维泊松方程求解器（单位正方形区域，$u=0$ 在全部边界上）。右端项取 $f(x,y)=\sin(\pi x)\sin(\pi y)$，解析解为 $u(x,y)=\sin(\pi x)\sin(\pi y)/(2\pi^2)$。验证收敛性。
-\item[14.]（薛定谔方程的时间演化）用 Crank-Nicolson 格式离散化时间相关薛定谔方程 $\mathrm{i}\hbar\partial_t\psi = -\frac{\hbar^2}{2m}\partial_x^2\psi$，编写一个演化高斯波包的代码。\textbf{提示：} 这实际上是"虚时间"热传导方程与实时间波动方程的混合——注意 $\mathrm{i}$ 带来的关键区别。
+\item[14.]（薛定谔方程的时间演化）用 Crank-Nicolson 格式离散化时间相关薛定谔方程 $\mathrm{i}\hbar\partial_t\psi = -\frac{\hbar^2}{2m}\partial_x^2\psi$，编写一个演化高斯波包的代码。\textbf{提示：} 实时间薛定谔方程是色散方程（波包振荡并扩散），并非二阶波动方程；令 $\tau=\mathrm{i}t$（虚时间）才化为热传导型方程。用 Crank-Nicolson 离散时，$\mathrm{i}$ 使格式保持幺正而非耗散。
 \item[15.]（稀疏矩阵的有限元入门）对一维泊松方程，构造线性有限元刚度矩阵，并与有限差分矩阵对比。说明为何有限元矩阵也是稀疏的，以及它在处理非均匀网格时的优势。
 \item[16.]（并行计算的初步认识）将二维拉普拉斯求解器中的矩阵以块形式划分，简要说明如何在多核 CPU 或 GPU 上并行化稀疏矩阵乘法。不需要完整实现，但需要给出伪代码和计算与通信的比例分析。
 \item[17.]（自适应网格加密）对于一维泊松方程 $-\frac{\dd^2 u}{\dd x^2}=f(x)$，当 $f(x)$ 在局部区域剧烈变化时，设计一个简单的自适应网格加密策略：在误差大的区域自动加密网格。比较均匀网格和自适应网格的误差与计算量。

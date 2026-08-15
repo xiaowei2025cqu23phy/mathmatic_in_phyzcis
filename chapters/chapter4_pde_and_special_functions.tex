@@ -81,7 +81,7 @@ u(x,t) = f(x-ct) + g(x+ct),
 \end{itemize}
 
 \begin{insight}[抛物型方程的物理直觉]
-热传导方程展现了"时间之箭"：将 $t\to -t$ 替换，方程变为 $u_t = -\kappa u_{xx}$，这是向后热传导方程——物理上不可能，因为它需要从均匀温度场恢复初始的不均匀性。这正是\textbf{热力学第二定律}在 PDE 层面的体现。
+热传导方程展现了“时间之箭”：将 $t\to -t$ 替换，方程变为 $u_t = -\kappa u_{xx}$，这是向后热传导方程——物理上不可能，因为它需要从均匀温度场恢复初始的不均匀性。这正是\textbf{热力学第二定律}在 PDE 层面的体现。
 \end{insight}
 
 \subsection{泊松方程与拉普拉斯方程——椭圆型}
@@ -96,7 +96,7 @@ u(x,t) = f(x-ct) + g(x+ct),
 \textbf{物理分类：}
 \begin{itemize}
 \item \textbf{椭圆型}：稳态问题，不涉及时间演化。
-\item 解由边界条件唯一确定（Dirichlet 或 Neumann 条件）。
+\item 解由边界条件唯一确定（Dirichlet 条件）；对纯 Neumann 条件，解在相差一个常数的意义下唯一（且需满足相容性条件 $\oint_{\partial\Omega}\partial_n u\,\dd S = 0$）。
 \item 解具有"刚性"：最大值原理（调和函数的最大值必在边界上）。
 \end{itemize}
 
@@ -297,7 +297,7 @@ c_n = \frac{2}{a\sinh(k_n b)}\int_0^a f(x)\sin\frac{n\pi x}{a}\,\dd x.
 
 \subsection*{动机：球对称问题为什么必然出现勒让德多项式？}
 
-在球坐标中分离变量后，$\theta$ 方向的方程（经过变换 $x=\cos\theta$）就是勒让德方程。要求解在 $\theta=0,\pi$（南北极）处有限，$l$ 必须为整数——这就是角动量量子化的数学起源！勒让德多项式不是一个"可以选"的基函数，而是物理约束（有界性）迫使的唯一选择。
+在球坐标中分离变量后，$\theta$ 方向的方程（经过变换 $x=\cos\theta$）就是勒让德方程。要求解在 $\theta=0,\pi$（南北极）处有限，$l$ 必须为整数——这就是角动量量子化的数学起源！勒让德多项式不是一个“可以选”的基函数，而是物理约束（有界性）迫使的唯一选择。
 
 \subsection{勒让德方程}
 
@@ -332,6 +332,13 @@ P_l(x) = \frac{1}{2^l l!}\frac{\dd^l}{\dd x^l}(x^2-1)^l.
 (l+1)P_{l+1}(x) = (2l+1)xP_l(x) - lP_{l-1}(x).
 \end{equation}
 由 $P_0(x)=1$, $P_1(x)=x$ 和递推关系可以生成所有高阶勒让德多项式。
+
+\textbf{生成函数：}
+\begin{equation}
+\sum_{l=0}^{\infty} P_l(x)t^l = \frac{1}{\sqrt{1-2xt+t^2}}.
+\label{eq:legendre_genfunc}
+\end{equation}
+展开左端即可系统地得到各阶勒让德多项式；它在多极展开与量子力学（如点电荷势的角向结构）中反复出现。
 
 \textbf{正交性：}
 \begin{equation}
@@ -369,14 +376,15 @@ A_l = \frac{2l+1}{2}\int_{-1}^{1} f(x)P_l(x)\,\dd x.
 \end{itemize}
 
 \begin{insight}
-多极展开的物理意义：远场电势由总电荷（单极）主导，当总电荷为零时由偶极主导，以此类推。这如同傅里叶级数在空间角域中的对应——将电荷分布的角向结构分解为不同"空间频率"的成分。实验物理中，通过测量远场多极矩可以反推源分布的对称性——这正是原子核形状和分子结构的诊断工具。
+多极展开的物理意义：远场电势由总电荷（单极）主导，当总电荷为零时由偶极主导，以此类推。这如同傅里叶级数在空间角域中的对应——将电荷分布的角向结构分解为不同“空间频率”的成分。实验物理中，通过测量远场多极矩可以反推源分布的对称性——这正是原子核形状和分子结构的诊断工具。
 \end{insight}
 
 \subsection{连带勒让德函数与球谐函数}
 
 对于 $m\neq0$ 的情况，方程的解是\textbf{连带勒让德函数}：
 \begin{equation}
-P_l^m(x) = (1-x^2)^{m/2}\frac{\dd^m}{\dd x^m}P_l(x),\qquad -l\leq m\leq l.
+P_l^m(x) = (1-x^2)^{m/2}\frac{\dd^m}{\dd x^m}P_l(x),\quad m=0,1,\dots,l;\qquad
+P_l^{-m}(x) = (-1)^m\frac{(l-m)!}{(l+m)!}P_l^m(x).
 \label{eq:associated_legendre}
 \end{equation}
 
@@ -399,7 +407,7 @@ P_l^m(\cos\theta)e^{\mathrm{i}m\phi}.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig4_5_spherical_harmonics.png}
-\caption{球谐函数 $Y_l^m(\theta,\phi)$ 的 3D 可视化。颜色表示实部的正负，径向距离表示 $|Y_l^m|$ 的大小。$l$ 增加意味着角向振荡加快。}
+\caption{球谐函数 $Y_{lm}(\theta,\phi)$ 的 3D 可视化。颜色表示实部的正负，径向距离表示 $|Y_{lm}|$ 的大小。$l$ 增加意味着角向振荡加快。}
 \label{fig:spherical_harmonics}
 \end{figure}
 
@@ -444,6 +452,13 @@ J_{\nu-1}(x) + J_{\nu+1}(x) &= \frac{2\nu}{x}J_\nu(x),\\
 J_{\nu-1}(x) - J_{\nu+1}(x) &= 2J'_\nu(x).
 \end{align}
 
+\textbf{生成函数：}
+\begin{equation}
+\sum_{n=-\infty}^{\infty} J_n(x)t^n = e^{x(t-1/t)/2}.
+\label{eq:bessel_genfunc}
+\end{equation}
+左端展开（或比较 $t^n$ 项的系数）即可得到各阶 $J_n(x)$；它在衍射理论、电磁波展开等问题中极为常用。
+
 \begin{insight}
 $J_\nu(x)$ 在 $x\to\infty$ 时像衰减的正弦波，这正是"径向波动"的特征：
 \begin{itemize}
@@ -469,6 +484,13 @@ $J_\nu(x)$ 在 $x\to\infty$ 时像衰减的正弦波，这正是"径向波动"�
 J_\nu\!\left(\frac{j_{\nu,n}r}{R}\right) r\,\dd r
 = \frac{R^2}{2}[J_{\nu+1}(j_{\nu,n})]^2\delta_{mn}.
 \label{eq:bessel_ortho}
+\end{equation}
+
+由此得到\textbf{傅里叶-贝塞尔级数}：$[0,R]$ 上的良函数 $f(r)$ 可以展开为
+\begin{equation}
+f(r) = \sum_{n=1}^{\infty} c_n J_\nu\!\left(\frac{j_{\nu,n}r}{R}\right),\qquad
+c_n = \frac{2}{R^2[J_{\nu+1}(j_{\nu,n})]^2}\int_0^R f(r)J_\nu\!\left(\frac{j_{\nu,n}r}{R}\right)r\,\dd r.
+\label{eq:fourier_bessel_series}
 \end{equation}
 
 \subsection{物理应用：圆膜振动——完整算例}
@@ -514,14 +536,14 @@ f_{mn} = \frac{c\,j_{m,n}}{2\pi a}\;}.
 \textbf{步骤 8：物理解读。}
 基频：$(m,n)=(0,1)$ 对应 $j_{0,1}\approx 2.405$，$f_{01}=0.383c/a$——全膜同向振动。
 一阶泛音：$(m,n)=(1,1)$ 对应 $j_{1,1}\approx 3.832$，有一条直径节线。
-这些频率并非整数倍关系——鼓的声音"不和谐"的数学根源正在于此。
+这些频率并非整数倍关系——鼓的声音“不和谐”的数学根源正在于此。
 \end{example}
 
 % 圆膜振动模式
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig4_4_drum_modes.png}
-\caption{圆膜的振动模式。颜色表位移，黑线为节线（位移恒为零的线）。$(m,n)$ 中 $m$ 为直径节线数，$n$ 为环向节线数。频率 $f$ 增加随 $m,n$ 增大而增大。}
+\caption{圆膜的振动模式。颜色表示位移，黑线为节线（位移恒为零的线）。$(m,n)$ 中 $m$ 为直径节线数，$n$ 为环向节线数。频率 $f$ 随 $m,n$ 增大而增大。}
 \label{fig:drum_modes}
 \end{figure}
 
@@ -582,6 +604,13 @@ H_{n+1}(\xi) = 2\xi H_n(\xi) - 2n H_{n-1}(\xi),\qquad
 H'_n(\xi) = 2n H_{n-1}(\xi).
 \end{equation}
 
+\textbf{生成函数：}
+\begin{equation}
+\sum_{n=0}^{\infty} \frac{H_n(\xi)}{n!}t^n = e^{2\xi t - t^2}.
+\label{eq:hermite_genfunc}
+\end{equation}
+这一恒等式在推导相干态（习题 17）和统计物理的配分函数时十分有用。
+
 \subsection{量子谐振子的本征解}
 
 \textbf{能级：}
@@ -597,7 +626,7 @@ H_n\!\left(\sqrt{\frac{m\omega}{\hbar}}\,x\right) e^{-m\omega x^2/(2\hbar)}.
 \end{equation}
 
 \begin{insight}
-埃尔米特多项式的递推关系 $H_{n+1} = 2\xi H_n - 2n H_{n-1}$ 在量子力学中有深刻的物理对应——它正是\textbf{升降算符} $\hat{a}^\dagger$ 和 $\hat{a}$ 作用的数学表现。这种代数方法（ ladder operator）远比直接求解微分方程优雅，也是量子场论中产生/湮灭算符的原型。
+埃尔米特多项式的递推关系 $H_{n+1} = 2\xi H_n - 2n H_{n-1}$ 在量子力学中有深刻的物理对应——它正是\textbf{升降算符} $\hat{a}^\dagger$ 和 $\hat{a}$ 作用的数学表现。这种代数方法（ladder operator）远比直接求解微分方程优雅，也是量子场论中产生/湮灭算符的原型。
 \end{insight}
 
 \section{施图姆-刘维尔理论}
@@ -648,7 +677,7 @@ H_n\!\left(\sqrt{\frac{m\omega}{\hbar}}\,x\right) e^{-m\omega x^2/(2\hbar)}.
 \begin{example}[将勒让德方程化为 SL 形式]
 勒让德方程 $(1-x^2)y'' - 2xy' + l(l+1)y = 0$。
 
-乘以 $1$，注意到 $-[(1-x^2)y']' = -(1-x^2)y'' + 2xy'$，而原方程中的 $-2xy'$ 来自这里。整理：
+注意到 $[(1-x^2)y']' = (1-x^2)y'' - 2xy'$，即 $-(1-x^2)y'' + 2xy' = -[(1-x^2)y']'$，故原方程可整理为：
 \begin{equation}
 -\frac{\dd}{\dd x}\left[(1-x^2)\frac{\dd y}{\dd x}\right] = l(l+1)y.
 \end{equation}
@@ -664,7 +693,7 @@ xy'' + y' + \left(x - \frac{\nu^2}{x}\right)y = 0.
 \begin{equation}
 -\frac{\dd}{\dd x}\left(x\frac{\dd y}{\dd x}\right) + \frac{\nu^2}{x}y = \lambda x y.
 \end{equation}
-所以 $p(x)=x$, $q(x)=\nu^2/x$, $w(x)=x$, $\lambda = k^2$（其中 $k$ 来自分离常数）。
+所以 $p(x)=x$, $q(x)=\nu^2/x$, $w(x)=x$。注意这里 $x^2$ 项的系数已归一化为 $1$，故 $\lambda = 1$；若将贝塞尔方程写为一般形式 $x^2y''+xy'+(k^2x^2-\nu^2)y=0$，则 $\lambda=k^2$（$k$ 来自分离常数）。
 \end{example}
 
 \begin{insight}
@@ -769,7 +798,7 @@ $-(py')' + qy = \lambda w y$ & SL 标准形式 \\
 (3) $u_{xx} + u_{yy} = 0$；(4) $u_{xx} + 2u_{xy} + u_{yy} = 0$。
 \item 用分离变量法求解矩形膜 $(0<x<a,\;0<y<b)$ 的波动方程，边界固定，初始位移为零，初始速度为 $g(x,y)$。写出本征频率。
 \item 证明勒让德多项式的正交关系 $\int_{-1}^1 P_l(x)P_{l'}(x)\,\dd x = \frac{2}{2l+1}\delta_{ll'}$。
-\item 写出半径为 $R$ 的无限长圆柱体内部拉普拉斯方程的通解，设边界条件为 $u(R,\phi)=V_0\cos\phi$。\textbf{提示：} 解应为 $u(r,\phi)=Ar\cos\phi$。
+\item 写出半径为 $R$ 的无限长圆柱体内部拉普拉斯方程的通解，\\ 设边界条件为 $u(R,\phi)=V_0\cos\phi$。\textbf{提示：} 解应为 $u(r,\phi)=Ar\cos\phi$。
 \item 写出前三个埃尔米特多项式 $H_0,H_1,H_2$，并验证它们满足埃尔米特方程。
 \item 验证 $j_0(x)$ 和 $j_1(x)$ 满足球贝塞尔方程。
 \end{enumerate}
@@ -777,10 +806,10 @@ $-(py')' + qy = \lambda w y$ & SL 标准形式 \\
 \textbf{提高题（应用分析）}
 
 \begin{enumerate}
-\item[7.] 半径为 $R$ 的无限长圆柱体，侧面电势为 $V_0$（与 $\phi$ 无关），求内部电势分布。将解写为贝塞尔函数的级数形式。
+\item[7.] 半径为 $R$ 的无限长圆柱体，初始温度分布为 $u(r,0)=f(r)$（与 $\phi$ 无关），侧面温度保持为 $0$。求 $t>0$ 时的温度分布，并将解写为傅里叶-贝塞尔级数形式（利用 \eqref{eq:fourier_bessel_series} 的系数公式）。
 \item[8.] 一圆形鼓膜半径为 $a$，初始位移为 $f(r) = h(1 - r^2/a^2)$，初始速度为零。求其振动规律。摩擦使振动衰减，定性地说明加入阻尼项 $\gamma u_t$ 后的效果。
 \item[9.] 球贝塞尔函数 $j_l(x)$ 满足递推关系 $j_{l+1}(x) = \frac{2l+1}{x}j_l(x) - j_{l-1}(x)$。验证 $l=0$ 和 $l=1$ 的情形。
-\item[10.] 将函数 $f(x)=\Theta(1-|x|)$ 在勒让德多项式基下展开到 $l=4$ 项。
+\item[10.] 将函数 $f(x)=\Theta(\tfrac12-|x|)$ 在勒让德多项式基下展开到 $l=4$ 项。
 \item[11.] 求量子谐振子的基态 $\psi_0(x)$ 和第一激发态 $\psi_1(x)$ 的显式表达式。验证 $\psi_0$ 和 $\psi_1$ 正交。
 \item[12.] 写出叠加原理：利用热传导方程的线性性质，由两个特解构造满足 $u(x,0)=3\sin(\pi x/L)-2\sin(2\pi x/L)$ 的解。
 \end{enumerate}

@@ -34,9 +34,9 @@
 \subsection{学习路径建议}
 
 \begin{itemize}
-  \item \textbf{物理专业学生}：重点在 \S1.2--\S1.5（矢量分析）和 \S1.8--\S1.9（线性空间），这是电动力学和量子力学的直接预备。
-  \item \textbf{数学专业学生}：重点在 \S1.6（张量）和 \S1.9（谱定理），这些是微分几何和泛函分析的入门。
-  \item \textbf{工程专业学生}：重点在 \S1.2--\S1.5 和 \S1.7（转动惯量、应力张量），为连续介质力学打基础。
+  \item \textbf{物理专业学生}：重点在 \S1.3--\S1.6（矢量分析）和 \S1.8--\S1.9（线性空间），这是电动力学和量子力学的直接预备。
+  \item \textbf{数学专业学生}：重点在 \S1.7（张量）和 \S1.9（谱定理），这些是微分几何和泛函分析的入门。
+  \item \textbf{工程专业学生}：重点在 \S1.3--\S1.6 和 \S1.7（转动惯量、应力张量），为连续介质力学打基础。
 \end{itemize}
 
 \section{引言：物理定律需要坐标系吗？}
@@ -80,7 +80,7 @@
   \item \textbf{抛物线对称}：匀强电场中的带电粒子轨迹
 \end{itemize}
 
-如果将一个球对称问题强制塞进直角坐标，边界条件会变得极其复杂。例如球体内部的边界 $x^2+y^2+z^2=R^2$ 需要同时约束三个坐标。而在球坐标中，边界只是简洁的 $r=R$。
+如果将一个球对称问题强制塞进直角坐标，边界条件会变得极其复杂。例如球的表面 $x^2+y^2+z^2=R^2$ 需要同时约束三个坐标。而在球坐标中，边界只是简洁的 $r=R$。
 
 \textbf{基本原则：让坐标面与物理边界重合。}
 
@@ -119,7 +119,7 @@ h_i = \left|\frac{\partial\mathbf{r}}{\partial q_i}\right|,\qquad i=1,2,3
 = \sum_{i,j} \frac{\partial\mathbf{r}}{\partial q_i}\cdot\frac{\partial\mathbf{r}}{\partial q_j}\dd q_i\dd q_j .
 \]
 
-如果 $\mathbf{e}_i\cdot\mathbf{e}_j = \delta_{ij}$（即坐标线处处正交），则叉乘项消失：
+如果 $\mathbf{e}_i\cdot\mathbf{e}_j = \delta_{ij}$（即坐标线处处正交），则交叉项（$i\neq j$ 的项）消失：
 \[
 \boxed{\;\dd s^2 = h_1^2\dd q_1^2 + h_2^2\dd q_2^2 + h_3^2\dd q_3^2\;}.
 \label{eq:metric_line_element}
@@ -329,7 +329,7 @@ $h_\rho=1,\;h_\phi=\rho,\;h_z=1$，$h_1h_2h_3 = \rho$。
 偶排列：$(1,2,3), (2,3,1), (3,1,2)$。
 奇排列：$(3,2,1), (1,3,2), (2,1,3)$。
 
-\subsection{用 $\epsilon_{ijk}$ 表示叉积和行列式}
+\subsection{用 \texorpdfstring{$\epsilon_{ijk}$}{εijk} 表示叉积和行列式}
 
 \textbf{叉积：}
 \[
@@ -347,7 +347,7 @@ a_{31} & a_{32} & a_{33}
 = \epsilon_{ijk}a_{1i}a_{2j}a_{3k}.
 \]
 
-\subsection{最重要的恒等式：$\epsilon$-$\delta$ 关系}
+\subsection{最重要的恒等式：\texorpdfstring{$\epsilon$-$\delta$}{ε-δ} 关系}
 
 \[
 \boxed{\;\epsilon_{ijk}\epsilon_{ilm} = \delta_{jl}\delta_{km} - \delta_{jm}\delta_{kl}\;}.
@@ -393,8 +393,8 @@ a_{31} & a_{32} & a_{33}
 &= \epsilon_{ijk}\epsilon_{jlm}A_lB_mC_k \\
 &= -\epsilon_{jik}\epsilon_{jlm}A_lB_mC_k \\
 &= -(\delta_{il}\delta_{km} - \delta_{im}\delta_{kl})A_lB_mC_k \\
-&= -A_iB_kC_k + A_kB_kC_i \\
-&= C_i(\mathbf{A}\cdot\mathbf{B}) - A_i(\mathbf{B}\cdot\mathbf{C}).
+&= -A_iB_kC_k + A_kB_iC_k \\
+&= B_i(\mathbf{A}\cdot\mathbf{C}) - A_i(\mathbf{B}\cdot\mathbf{C}).
 \end{align*}
 注意结果中 $\mathbf{A}$ 和 $\mathbf{C}$ 的位置与第一个三重积不同——叉积不满足结合律！$\square$
 \end{example}
@@ -416,7 +416,7 @@ a_{31} & a_{32} & a_{33}
 同样 $\partial_i\partial_j = \partial_j\partial_i$ 关于 $i,j$ 对称，$\epsilon_{ijk}$ 关于 $i,j$ 反对称，结果为零。$\square$
 \end{example}
 
-\subsection{物理洞察：为什么 $\epsilon_{ijk}$ 这么有用？}
+\subsection{物理洞察：为什么 \texorpdfstring{$\epsilon_{ijk}$}{εijk} 这么有用？}
 
 物理定律经常涉及叉积。力矩 $\bm{\tau} = \mathbf{r}\times\mathbf{F}$，洛伦兹力 $\mathbf{F}=q\mathbf{v}\times\mathbf{B}$，角动量 $\mathbf{L} = \mathbf{r}\times\mathbf{p}$。用指标符号，这些可以统一处理。
 
@@ -425,7 +425,7 @@ a_{31} & a_{32} & a_{33}
 \subsection{应避免的常见错误}
 
 \begin{itemize}
-  \item \textbf{求和指标混淆}：$\epsilon_{ijk}A_jB_k$ 中 $j,k$ 是哑指标，可以改名。但 $\epsilon_{iji}A_jB_i$ 中 $i$ 既是求和指标又是自由指标——这是非法的！
+  \item \textbf{求和指标混淆}：$\epsilon_{ijk}A_jB_k$ 中 $j,k$ 是哑指标，可以改名。但哑指标在同一项中恰好出现两次——例如 $\epsilon_{iji}A_jB_i$ 中 $i$ 出现了三次（$\epsilon$ 的第一个、第三个位置以及 $B_i$ 中），这样的写法是非法的！
   \item \textbf{$\epsilon$ 乘积次序}：$\epsilon_{ijk}\epsilon_{ilm}$ 对 $i$ 求和；$\epsilon_{jik}\epsilon_{ilm} = -\epsilon_{ijk}\epsilon_{ilm}$。
   \item \textbf{符号误判}：$(1,3,2)$ 是奇排列（一次交换），$\epsilon_{132} = -1$。
 \end{itemize}
@@ -507,7 +507,7 @@ $\nabla\times\mathbf{F} = (0,0,2)$。
 \[
 \int_S (\nabla\times\mathbf{F})\cdot\dd\mathbf{S} = 2\cdot(\pi R^2) = 2\pi R^2.
 \]
-一致。注意这个结果是几何的——环量正比于面积而非半径平方的直觉，因为 $\nabla\times\mathbf{F}$ 是常数。
+一致。注意这个结果具有几何意义：由于 $\nabla\times\mathbf{F}$ 是常数，环量正比于圆盘面积 $\pi R^2$，即正比于 $R^2$——这正是斯托克斯定理告诉我们的。
 \end{example}
 
 \subsection{格林恒等式}
@@ -639,7 +639,7 @@ E_z/c & -B_y & B_x & 0
 
 \section{线性空间与狄拉克符号}
 
-\subsection{从 $\mathbb{R}^3$ 到希尔伯特空间}
+\subsection{从 \texorpdfstring{$\mathbb{R}^3$}{R³} 到希尔伯特空间}
 
 你在中学就熟悉了三维矢量：可以相加、数乘、求长度和夹角。量子力学中的波函数也具有完全相同的代数结构——它们生活在\textbf{希尔伯特空间}中。
 
@@ -672,7 +672,7 @@ E_z/c & -B_y & B_x & 0
 \quad c_i = \langle e_i|\psi\rangle.
 \]
 
-\begin{example}[用狄拉克符号理解傅里叶级数]
+\begin{example}[狄拉克符号与傅里叶级数]
 $\{|e_n\rangle\}$ 取为正交归一的傅里叶基 $\{e^{\mathrm{i}n\omega_0 t}/\sqrt{T}\}$。则任意周期函数可以展开为
 \[
 |f\rangle = \sum_n c_n |e_n\rangle,\quad
@@ -700,10 +700,10 @@ c_n = \langle e_n|f\rangle = \frac{1}{\sqrt{T}}\int_0^T f(t)e^{-\mathrm{i}n\omeg
 
 \textbf{第 3 步：}
 \[
-\mathbf{v}_3^\perp = \mathbf{v}_3 - (\mathbf{e}_1\cdot\mathbf{v}_3)\mathbf{e}_1 - (\mathbf{e}_2\cdot\mathbf{v}_3)\mathbf{e}_2 = \left(-\frac23,\frac23,-\frac23\right).
+\mathbf{v}_3^\perp = \mathbf{v}_3 - (\mathbf{e}_1\cdot\mathbf{v}_3)\mathbf{e}_1 - (\mathbf{e}_2\cdot\mathbf{v}_3)\mathbf{e}_2 = \left(-\frac23,\frac23,\frac23\right).
 \]
 \[
-\mathbf{e}_3 = \frac{\mathbf{v}_3^\perp}{\|\mathbf{v}_3^\perp\|} = \frac{1}{\sqrt{3}}(-1,1,-1).
+\mathbf{e}_3 = \frac{\mathbf{v}_3^\perp}{\|\mathbf{v}_3^\perp\|} = \frac{1}{\sqrt{3}}(-1,1,1).
 \]
 
 验证：$\mathbf{e}_1\cdot\mathbf{e}_2 = \mathbf{e}_1\cdot\mathbf{e}_3 = \mathbf{e}_2\cdot\mathbf{e}_3 = 0$。$\square$
@@ -817,14 +817,14 @@ E_n = \frac{\hbar^2 k_n^2}{2m} = \frac{n^2\pi^2\hbar^2}{2ma^2}.
 \]
 
 \begin{insight}[不确定原理的几何解释]
-不确定原理不是仪器的缺陷，而是量子态几何性质的体现。两个算符不对易意味着它们的本征态"指向不同方向"——你不能同时精确确定它们。ΔxΔp ≥ ℏ/2 的数学根源在傅里叶分析中：时宽-带宽积受 $\Delta t\,\Delta\omega \geq 1/2$ 约束（见第 3 章）。位置和动量正是通过傅里叶变换联系的。
+不确定原理不是仪器的缺陷，而是量子态几何性质的体现。两个算符不对易意味着它们的本征态“指向不同方向”——你不能同时精确确定它们。$\Delta x\,\Delta p \geq \hbar/2$ 的数学根源在傅里叶分析中：时宽-带宽积受 $\Delta t\,\Delta\omega \geq 1/2$ 约束（见第 3 章）。位置和动量正是通过傅里叶变换联系的。
 \end{insight}
 
 \section{应用专题：电磁场与量子力学中的数学结构}
 
 \subsection{电磁场中高斯定理的应用}
 
-回顾 $\S1.5$ 的高斯定理。在电动力学中，我们有：
+回顾 \S1.6 的高斯定理。在电动力学中，我们有：
 \[
 \oint_{\partial V}\mathbf{E}\cdot\dd\mathbf{S} = \frac{Q_{\text{内}}}{\varepsilon_0}.
 \]
@@ -901,7 +901,7 @@ $\downarrow$ \\
   \item 写出柱坐标系 $(\rho,\phi,z)$ 中梯度、散度、旋度和拉普拉斯算子的显式表达式。然后计算 $\nabla\cdot(\rho\mathbf{e}_\rho)$。
   \item 用指标法证明 $\nabla\cdot(\nabla\times\mathbf{A}) = 0$ 和 $\nabla\times(\nabla f) = 0$。
   \item 计算三重积分：直接验证 $\displaystyle\int_0^1\int_0^1\int_0^1 (2x+y+z)\,\dd x\dd y\dd z$。然后验证高斯定理对 $\mathbf{F}=(2x,y,z)$ 在单位立方体上成立。
-  \item 判断下列矢量是否线性无关：(1) $(1,2,3),(4,5,6),(7,8,9)$；(2) $(1,0,1),(0,1,1),(1,1,0)$。
+  \item 判断下列矢量是否线性无关：\\ (1) $(1,2,3),(4,5,6),(7,8,9)$；(2) $(1,0,1),(0,1,1),(1,1,0)$。
   \item 求 $f(z)=z^2$ 在 $z=1+\mathrm{i}$ 处的导数（回顾第 2 章内容，此处验证第 1 章线性空间概念的普遍性）。
 \end{enumerate}
 
@@ -913,7 +913,7 @@ $\downarrow$ \\
   \item 设 $\mathbf{F}=(y,-x,z)$，用斯托克斯定理求沿 $x^2+y^2=1$（$z=0$）的环量。
   \item 证明 $\mathbf{A}\times(\mathbf{B}\times\mathbf{C}) + \mathbf{B}\times(\mathbf{C}\times\mathbf{A}) + \mathbf{C}\times(\mathbf{A}\times\mathbf{B}) = 0$（雅可比恒等式，用 $\epsilon_{ijk}$ 证明）。
   \item 证明转动惯量张量 $I_{ij}$ 是对称的。对长方体 $0\leq x\leq a,0\leq y\leq b,0\leq z\leq c$，写出 $I_{ij}$ 的显式表达式。
-  \item 一维谐振子的哈密顿量 $\hat{H} = -\frac{\hbar^2}{2m}\frac{\dd^2}{\dd x^2} + \frac12 m\omega^2 x^2$。证明升降算符 $\hat{a} = \sqrt{m\omega/(2\hbar)}(\hat{x} + \mathrm{i}\hat{p}/(m\omega))$ 满足 $[\hat{a},\hat{a}^\dagger]=1$，且本征值为 $E_n = (n+1/2)\hbar\omega$。
+  \item 一维谐振子的哈密顿量 $\hat{H} = -\frac{\hbar^2}{2m}\frac{\dd^2}{\dd x^2} + \frac12 m\omega^2 x^2$。\\ 证明升降算符 $\hat{a} = \sqrt{m\omega/(2\hbar)}(\hat{x} + \mathrm{i}\hat{p}/(m\omega))$ 满足 $[\hat{a},\hat{a}^\dagger]=1$，且本征值为 $E_n = (n+1/2)\hbar\omega$。
 \end{enumerate}
 
 \textbf{挑战题（综合拓展）——建议用时 90 分钟}
